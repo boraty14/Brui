@@ -1,0 +1,28 @@
+NOTES
+- Anchor is always
+
+
+COMPONENTS
+- NodeTransform
+- NodeInteractable(ColliderWrapper)
+- NodeImage(NodeTransform)
+- NodeButton(NodeTransform)
+- NodeScroll(NodeTransform)
+- NodeInput
+
+INTERFACES
+- INodePointerDown
+- INodePointerUp
+- INodePointerClick
+- INodePointerBeginDrag
+- INodePointerEndDrag
+- INodePointerDrag
+
+OTHERS
+- Layouts
+- Sizing (NodeTransform)
+- Masks
+- Canvas
+- Lists
+- Z index
+- Safe Area
