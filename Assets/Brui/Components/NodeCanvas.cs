@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Brui.Interaction;
 using UnityEngine;
 
@@ -12,7 +11,6 @@ namespace Brui.Components
 
         private Vector2 _screenSize;
         private Rect _safeArea;
-        private readonly List<NodeLayout> _layouts = new();
 
         private int _order;
 
@@ -26,41 +24,82 @@ namespace Brui.Components
             _screenSize = new Vector2(Screen.width, Screen.height);
             _safeArea = Screen.safeArea;
             _order = 0;
-            _layouts.Clear();
-            
+
             float cameraVerticalSize = nodeCamera.VerticalSize;
             Vector2 screenSize = _screenSize;
             float width = cameraVerticalSize * (screenSize.x / screenSize.y);
             float height = cameraVerticalSize;
             Vector2 canvasSize = new Vector2(width * 2f, height * 2f);
 
-            ResolveChildNodes(transform,canvasSize);
-            ResolveLayouts();
+            transform.position = nodeCamera.transform.position + Vector3.forward * nodeCamera.DistanceToCamera;
+            ResolveChildNodes(transform, canvasSize);
         }
-        
+
         private void ResolveChildNodes(Transform nodeParent, Vector2 parentSize)
         {
             int childCount = nodeParent.childCount;
             for (int i = 0; i < childCount; i++)
             {
                 var child = transform.GetChild(i);
-                if (!child.TryGetComponent<NodeTransform>(out var nodeTransform))
+                if (child.TryGetComponent<NodeLayout>(out var nodeLayout))
                 {
+                    ResolveLayout(nodeLayout, parentSize);
                     continue;
                 }
-                ResolveNode(nodeTransform, parentSize);
+
+                ResolveNode(child.GetComponent<NodeTransform>(), parentSize);
             }
         }
 
         private void ResolveNode(NodeTransform nodeTransform, Vector2 parentSize)
         {
-            if (nodeTransform.transform.TryGetComponent<NodeLayout>(out var nodeLayout))
-            {
-                _layouts.Add(nodeLayout);
-            }
             SetNodeTransform(nodeTransform, parentSize);
             ResolveChildNodes(nodeTransform.transform, nodeTransform.NodeSize);
         }
+
+        private void ResolveLayout(NodeLayout nodeLayout, Vector2 parentSize)
+        {
+            SetNodeTransform(nodeLayout.NodeTransform, parentSize);
+
+            int childCount = nodeLayout.transform.childCount;
+            if (childCount == 0)
+            {
+                return;
+            }
+
+            bool isVertical = nodeLayout.layoutType == ENodeLayout.Vertical;
+            float interval = isVertical
+                ? nodeLayout.NodeTransform.NodeSize.y / (childCount + 1)
+                : nodeLayout.NodeTransform.NodeSize.x / (childCount + 1);
+            bool isReverse = nodeLayout.isReverse;
+
+            Vector2 startPosition = isVertical
+                ? new Vector2(0f, -nodeLayout.NodeTransform.NodeSize.y * 0.5f)
+                : new Vector2(-nodeLayout.NodeTransform.NodeSize.x * 0.5f, 0f);
+            
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = nodeLayout.transform.GetChild(i);
+                var childNode = child.GetComponent<NodeTransform>();
+                childNode.TransformSettings.AnchorX.Min = isVertical ? 0.5f : 0f;
+                childNode.TransformSettings.AnchorX.Max = isVertical ? 0.5f : 0f;
+                childNode.TransformSettings.AnchorY.Min = isVertical ? 0f : 0.5f;
+                childNode.TransformSettings.AnchorY.Max = isVertical ? 0f : 0.5f;
+                childNode.NodeSize = childNode.TransformSettings.SizeOffset;
+
+                Vector2 offset = isVertical
+                    ? isReverse
+                        ? new Vector2(0f, (childCount - i) * interval)
+                        : new Vector2(0f, (i + 1) * interval)
+                    : isReverse
+                        ? new Vector2((childCount - i) * interval, 0f)
+                        : new Vector2((i + 1) * interval, 0f);
+
+                childNode.transform.localPosition = startPosition + offset;
+                ResolveChildNodes(child, childNode.NodeSize);
+            }
+        }
+
 
         private void SetNodeTransform(NodeTransform nodeTransform, Vector2 parentSize)
         {
@@ -75,21 +114,13 @@ namespace Brui.Components
             // position
             Vector2 location = new Vector2((anchorXMin + anchorXMax) * 0.5f, (anchorYMin + anchorYMax) * 0.5f) +
                                nodeTransform.TransformSettings.PositionOffset;
-            Vector3 nodeLocation = nodeCamera.transform.position +
-                                   new Vector3(location.x, location.y, nodeCamera.DistanceToCamera);
-            nodeTransform.transform.localPosition = nodeLocation;
+            
+            nodeTransform.transform.localPosition = location;
 
             // size
             nodeTransform.NodeSize = new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
                                      nodeTransform.TransformSettings.SizeOffset;
-        }
-
-        private void ResolveLayouts()
-        {
-            foreach (var layout in _layouts)
-            {
-                layout.SetLayout();
-            }
+            
         }
     }
 }

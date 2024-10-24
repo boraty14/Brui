@@ -1,5 +1,4 @@
 NOTES
-- Layouts
 - Send events from NodeCamera,
 - Add Collider logic (NodeCollider)
 - AddScroll
@@ -23,6 +22,5 @@ INTERFACES
 - INodePointerDrag
 
 OTHERS
-- Layouts
 - Masks
 - Lists

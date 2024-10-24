@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Brui.Components
@@ -7,7 +8,11 @@ namespace Brui.Components
     public class NodeLayout : MonoBehaviour
     {
         public ENodeLayout layoutType;
+        public bool isReverse;
         public NodeTransform NodeTransform { get; private set; }
+
+        private readonly List<NodeTransform> _childNodes;
+        
         private void OnValidate()
         {
             SetComponents();
@@ -21,21 +26,6 @@ namespace Brui.Components
         private void SetComponents()
         {
             NodeTransform = GetComponent<NodeTransform>();
-        }
-
-        public void SetLayout()
-        {
-            int childCount = transform.childCount;
-            for (int i = 0; i < childCount; i++)
-            {
-                var child = transform.GetChild(i);
-                if (!child.TryGetComponent<NodeTransform>(out var nodeTransform))
-                {
-                    continue;
-                }
-                
-                // todo get position according to node size and orientation
-            }
         }
     }
 
