@@ -5,14 +5,28 @@ using UnityEngine;
 namespace Brui.Components
 {
     [RequireComponent(typeof(NodeTransform))]
+    [RequireComponent(typeof(NodeImage))]
     public class NodeButton : MonoBehaviour, INodePointerClick, INodePointerDown, INodePointerUp
     {
-        public NodeButtonSettings ButtonSettings;
-        public event Action OnButtonClick; 
         public NodeTransform NodeTransform { get; private set; }
+        public NodeImage NodeImage { get; private set; }
+        
+        public NodeButtonSettings ButtonSettings;
+        public event Action OnButtonClick;
+
+        private void OnValidate()
+        {
+            SetComponents();
+        }
 
         private void Awake()
         {
+            SetComponents();
+        }
+
+        private void SetComponents()
+        {
+            NodeImage = GetComponent<NodeImage>();
             NodeTransform = GetComponent<NodeTransform>();
         }
 
@@ -23,12 +37,14 @@ namespace Brui.Components
 
         public void OnPointerDown(Vector2 position)
         {
-            
+            transform.localScale = Vector3.one * ButtonSettings.PointerDownScale;
+            NodeImage.Image.color = ButtonSettings.PointerDownColor;
         }
 
         public void OnPointerUp(Vector2 position)
         {
-            
+            transform.localScale = Vector3.one;
+            NodeImage.Image.color = Color.white;
         }
     }
 

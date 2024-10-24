@@ -30,7 +30,6 @@ namespace Brui.Interaction
 #if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
             _nodeInputFetcher = new MobileInputFetcher();
 #else
-            Debug.Log("aaa");
             _nodeInputFetcher = new DesktopInputFetcher();
 #endif
         }
