@@ -1,5 +1,9 @@
 NOTES
-- Anchor is always
+- Layouts
+- Send events from NodeCamera,
+- Add Collider logic (NodeCollider)
+- AddScroll
+- Safe Area
 
 
 COMPONENTS
@@ -20,9 +24,5 @@ INTERFACES
 
 OTHERS
 - Layouts
-- Sizing (NodeTransform)
 - Masks
-- Canvas
 - Lists
-- Z index
-- Safe Area
