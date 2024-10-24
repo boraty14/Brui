@@ -12,6 +12,8 @@ COMPONENTS
 - NodeButton(NodeTransform)
 - NodeScroll(NodeTransform)
 - NodeInput
+- NodeLayout
+- NodeSafeArea
 
 INTERFACES
 - INodePointerDown
