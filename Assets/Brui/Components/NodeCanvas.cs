@@ -8,6 +8,8 @@ namespace Brui.Components
     public class NodeCanvas : MonoBehaviour
     {
         public NodeCamera nodeCamera;
+        public bool ApplySafeAreaX;
+        public bool ApplySafeAreaY;
 
         private Vector2 _screenSize;
         private Rect _safeArea;
@@ -23,12 +25,16 @@ namespace Brui.Components
         {
             _screenSize = new Vector2(Screen.width, Screen.height);
             _safeArea = Screen.safeArea;
+            Debug.Log(_safeArea);
             _order = 0;
 
             float cameraVerticalSize = nodeCamera.VerticalSize;
             Vector2 screenSize = _screenSize;
             float width = cameraVerticalSize * (screenSize.x / screenSize.y);
             float height = cameraVerticalSize;
+            
+            // TODO SAFE AREA
+            
             Vector2 canvasSize = new Vector2(width * 2f, height * 2f);
 
             transform.position = nodeCamera.transform.position + Vector3.forward * nodeCamera.DistanceToCamera;
