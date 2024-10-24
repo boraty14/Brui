@@ -13,6 +13,7 @@ namespace Brui.Components
 
         private Vector2 _screenSize;
         private Rect _safeArea;
+        private Vector2 _canvasSize;
 
         private int _order;
 
@@ -25,20 +26,34 @@ namespace Brui.Components
         {
             _screenSize = new Vector2(Screen.width, Screen.height);
             _safeArea = Screen.safeArea;
-            Debug.Log(_safeArea);
             _order = 0;
 
             float cameraVerticalSize = nodeCamera.VerticalSize;
             Vector2 screenSize = _screenSize;
-            float width = cameraVerticalSize * (screenSize.x / screenSize.y);
-            float height = cameraVerticalSize;
+            float width = cameraVerticalSize * (screenSize.x / screenSize.y) * 2f;
+            float height = cameraVerticalSize * 2f;
             
             // TODO SAFE AREA
+            Vector3 offset = Vector3.zero;
+            if (ApplySafeAreaX)
+            {
+                float leftRatio = _safeArea.x / _screenSize.x;
+                float rightRatio = (_screenSize.x - _safeArea.width) / _screenSize.x;
+                offset.x += (rightRatio - leftRatio) * 0.5f * width;
+                width *= 1 - (leftRatio + rightRatio);
+            }
+            if (ApplySafeAreaY)
+            {
+                float bottomRatio = _safeArea.y / _screenSize.y;
+                float topRatio = (_screenSize.y - _safeArea.height) / _screenSize.y;
+                offset.y += (topRatio - bottomRatio) * 0.5f * height;
+                height *= 1 - (bottomRatio + topRatio);
+            }
             
-            Vector2 canvasSize = new Vector2(width * 2f, height * 2f);
+            _canvasSize = new Vector2(width, height);
 
-            transform.position = nodeCamera.transform.position + Vector3.forward * nodeCamera.DistanceToCamera;
-            ResolveChildNodes(transform, canvasSize);
+            transform.position = nodeCamera.transform.position + Vector3.forward * nodeCamera.DistanceToCamera + offset;
+            ResolveChildNodes(transform, _canvasSize);
         }
 
         private void ResolveChildNodes(Transform nodeParent, Vector2 parentSize)
@@ -127,6 +142,15 @@ namespace Brui.Components
             nodeTransform.NodeSize = new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
                                      nodeTransform.TransformSettings.SizeOffset;
             
+        }
+        
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.green;
+
+            Vector3 position = transform.position;
+            Vector3 size = new Vector3(_canvasSize.x, _canvasSize.y, 0);
+            Gizmos.DrawWireCube(position, size);
         }
     }
 }

@@ -2,7 +2,7 @@ NOTES
 - Send events from NodeCamera,
 - Add Collider logic (NodeCollider)
 - AddScroll
-- Safe Area
+ -Input implementation
 
 
 COMPONENTS
