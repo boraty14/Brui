@@ -1,8 +1,8 @@
 NOTES
 - Send events from NodeCamera,
-- Add Collider logic (NodeCollider)
 - AddScroll
- -Input implementation
+- Input implementation
+- Text ?
 
 
 COMPONENTS
