@@ -3,8 +3,6 @@ NOTES
 - AddScroll
 - Text Input implementation
 - Text ?
-- Improve Node creation (Editor)
-
 
 COMPONENTS
 - NodeCanvas
