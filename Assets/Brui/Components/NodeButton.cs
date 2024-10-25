@@ -6,6 +6,7 @@ namespace Brui.Components
 {
     [RequireComponent(typeof(NodeTransform))]
     [RequireComponent(typeof(NodeImage))]
+    [RequireComponent(typeof(NodeCollider))]
     public class NodeButton : MonoBehaviour, INodePointerClick, INodePointerDown, INodePointerUp
     {
         public NodeTransform NodeTransform { get; private set; }

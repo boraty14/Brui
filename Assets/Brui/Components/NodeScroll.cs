@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Brui.Components
 {
     [RequireComponent(typeof(NodeTransform))]
+    [RequireComponent(typeof(NodeCollider))]
     public class NodeScroll : MonoBehaviour, INodeBeginDrag, INodeEndDrag, INodeDrag
     {
         public NodeScrollSettings ScrollSettings;

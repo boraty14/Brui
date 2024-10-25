@@ -1,21 +1,26 @@
 NOTES
-- Send events from NodeCamera,
+- Send events from NodeCamera
 - AddScroll
-- Input implementation
+- Text Input implementation
 - Text ?
 
 
 COMPONENTS
-- NodeTransform
-- NodeInteractable(ColliderWrapper)
-- NodeImage(NodeTransform)
-- NodeButton(NodeTransform)
-- NodeScroll(NodeTransform)
-- NodeInput
-- NodeLayout
-- NodeSafeArea
+- NodeCanvas
+- NodeTransform => DONE
+- NodeCollider => DONE
+- NodeImage => DONE
+- NodeButton(NodeImage, NodeCollider) => DONE
+- NodeLayout => DONE
+- NodeScroll(NodeCollider) => WIP
+- NodeTextInput(NodeCollider) => WIP
+- NodeText => WIP
 
-INTERFACES
+INTERACTION
+- NodeCamera => WIP
+
+
+EVENT HANDLERS
 - INodePointerDown
 - INodePointerUp
 - INodePointerClick
