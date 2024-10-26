@@ -8,8 +8,11 @@ namespace Brui.Components
         public NodeTransformSettings TransformSettings;
         private NodeCanvas _nodeCanvas;
 
-        public Vector2 NodeSize;
-        public int NodeOrder;
+        [field:SerializeField] public Vector2 NodeSize { get; private set; }
+        [field:SerializeField] public int NodeOrder { get; private set; }
+
+        public void SetNodeSize(Vector2 nodeSize) => NodeSize = nodeSize;
+        public void SetNodeOrder(int nodeOrder) => NodeOrder = nodeOrder; 
 
         private void OnDrawGizmosSelected()
         {

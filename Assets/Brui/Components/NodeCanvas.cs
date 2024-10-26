@@ -87,6 +87,7 @@ namespace Brui.Components
             {
                 int scrollViewChildCount = nodeScrollView.transform.childCount;
                 float scrollSize = scrollViewChildCount * nodeScrollView.NodeScroll.ScrollSettings.ItemSize;
+                nodeScrollView.ScrollSize = scrollSize;
                 if (isVertical)
                 {
                     nodeScrollView.NodeTransform.TransformSettings.AnchorX.Min = 0f;
@@ -132,8 +133,8 @@ namespace Brui.Components
                 childNode.TransformSettings.AnchorX.Max = isVertical ? 0.5f : 0f;
                 childNode.TransformSettings.AnchorY.Min = isVertical ? 0f : 0.5f;
                 childNode.TransformSettings.AnchorY.Max = isVertical ? 0f : 0.5f;
-                childNode.NodeSize = childNode.TransformSettings.SizeOffset;
-                childNode.NodeOrder = _order;
+                childNode.SetNodeSize(childNode.TransformSettings.SizeOffset);
+                childNode.SetNodeOrder(_order);
                 _order++;
 
                 Vector2 offset = isVertical
@@ -152,7 +153,7 @@ namespace Brui.Components
 
         private void SetNodeTransform(NodeTransform nodeTransform, Vector2 parentSize)
         {
-            nodeTransform.NodeOrder = _order;
+            nodeTransform.SetNodeOrder(_order);
             _order++;
 
             float anchorXMin = (nodeTransform.TransformSettings.AnchorX.Min - 0.5f) * parentSize.x;
@@ -167,8 +168,8 @@ namespace Brui.Components
             nodeTransform.transform.localPosition = location;
 
             // size
-            nodeTransform.NodeSize = new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
-                                     nodeTransform.TransformSettings.SizeOffset;
+            nodeTransform.SetNodeSize(new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
+                                      nodeTransform.TransformSettings.SizeOffset);
             
         }
         

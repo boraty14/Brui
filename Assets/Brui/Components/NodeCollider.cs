@@ -26,6 +26,8 @@ namespace Brui.Components
                 return;
             }
 
+            transform.localPosition =
+                new Vector3(0f, 0f, NodeConstants.NodeColliderOrderOffset * NodeTransform.NodeOrder);
             var nodeSize = NodeTransform.NodeSize;
             switch (_nodeColliderType)
             {

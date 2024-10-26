@@ -7,6 +7,7 @@ namespace Brui.Components
     [RequireComponent(typeof(NodeCollider))]
     [RequireComponent(typeof(NodeImage))]
     [RequireComponent(typeof(SpriteMask))]
+    [ExecuteAlways]
     public class NodeScroll : NodeComponent, INodeDrag
     {
         public NodeScrollSettings ScrollSettings;
@@ -46,7 +47,64 @@ namespace Brui.Components
 
         private void Update()
         {
+            SetLimits();
+        }
+
+        private void SetLimits()
+        {
+            var scrollSize = _scrollView.ScrollSize;
+            var scrollViewNode = _scrollView.NodeTransform;
+
+            switch (_scrollView.NodeLayout.layoutType)
+            {
+                case ENodeLayout.Vertical:
+                    float verticalStartLimit = (NodeTransform.NodeSize.y - scrollSize) * 0.5f;
+                    float verticalEndLimit = (-NodeTransform.NodeSize.y + scrollSize) * 0.5f;
+                    float verticalPosition = 0f;
+                    
+                    if (scrollViewNode.NodeSize.y < NodeTransform.NodeSize.y)
+                    {
+                        verticalPosition = Mathf.Lerp(verticalStartLimit, verticalEndLimit, _scrollView.PlacementRatio);
+                    }
+                    else
+                    {
+                        verticalPosition = Mathf.Clamp(scrollViewNode.TransformSettings.PositionOffset.y,
+                            verticalStartLimit, verticalEndLimit);
+                    }
+                    scrollViewNode.TransformSettings.PositionOffset.y = verticalPosition;
+                    break;
+                case ENodeLayout.Horizontal:
+                    float horizontalStartLimit = (-NodeTransform.NodeSize.x + scrollSize) * 0.5f;
+                    float horizontalEndLimit = (NodeTransform.NodeSize.y - scrollSize) * 0.5f;
+                    float horizontalPosition = 0f;
+                    
+                    if (scrollViewNode.NodeSize.x < NodeTransform.NodeSize.x)
+                    {
+                        horizontalPosition = Mathf.Lerp(horizontalStartLimit, horizontalEndLimit, _scrollView.PlacementRatio);
+                    }
+                    else
+                    {
+                        horizontalPosition = Mathf.Clamp(scrollViewNode.TransformSettings.PositionOffset.x,
+                            horizontalEndLimit, horizontalStartLimit);
+                    }
+                    scrollViewNode.TransformSettings.PositionOffset.x = horizontalPosition;
+                    break;
+            }
+        }
+
+        public void ScrollTo(float ratio)
+        {
             
+        }
+
+        public void ScrollTo(int itemIndex)
+        {
+            
+        }
+
+        public float GetItemScrollRatio(int itemIndex)
+        {
+            return 0f;
         }
 
         public void OnBeginDrag(Vector2 position)
@@ -71,15 +129,16 @@ namespace Brui.Components
             {
                 _parentScroll.OnDrag(position, delta);
             }
-            
-            var viewSize = _scrollView.NodeTransform.NodeSize;
-            var viewPosition = _scrollView.transform.localPosition;
+
+            var scrollViewNode = _scrollView.NodeTransform;
 
             switch (_scrollView.NodeLayout.layoutType)
             {
                 case ENodeLayout.Vertical:
+                    scrollViewNode.TransformSettings.PositionOffset += delta.y * ScrollSettings.ScrollSpeed * Vector2.up;
                     break;
                 case ENodeLayout.Horizontal:
+                    scrollViewNode.TransformSettings.PositionOffset += delta.x * ScrollSettings.ScrollSpeed * Vector2.right;
                     break;
             }
         }

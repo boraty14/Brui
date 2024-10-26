@@ -177,6 +177,11 @@ namespace Brui.Interaction
 
                     if (hit.collider.TryGetComponent<INodeDrag>(out _nodeDrag))
                     {
+                        if (IsPointerClickSet)
+                        {
+                            _nodePointerClick.OnCancelClick();
+                            _nodePointerClick = null;
+                        }
                         _nodeDrag.OnBeginDrag(pointerPosition);
                     }
                 }

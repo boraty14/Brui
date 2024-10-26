@@ -1,5 +1,4 @@
 NOTES
-- AddScroll ( With dynamic content size update)
 - Text Input implementation
 - Text ?
 
