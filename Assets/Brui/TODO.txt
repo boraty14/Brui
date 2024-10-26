@@ -1,13 +1,13 @@
 NOTES
-- Send events from NodeCamera
-- AddScroll
+- AddScroll ( With dynamic content size update)
 - Text Input implementation
 - Text ?
+- Horizontal support ?
 
 - Pointer enter, Pointer Exit,
 
 COMPONENTS
-- NodeCanvas
+- NodeCanvas => DONE
 - NodeTransform => DONE
 - NodeCollider => DONE
 - NodeImage => DONE
@@ -18,16 +18,14 @@ COMPONENTS
 - NodeText => WIP
 
 INTERACTION
-- NodeCamera => WIP
-
+- NodeCamera => DONE
 
 EVENT HANDLERS
-- INodePointerDown
-- INodePointerUp
-- INodePointerClick
-- INodePointerBeginDrag
-- INodePointerEndDrag
-- INodePointerDrag
+- INodePointerDown => DONE
+- INodePointerUp => DONE 
+- INodePointerClick => DONE
+- INodeDrag => DONE
+- INodeHover => DONE
 
 ORDER
 

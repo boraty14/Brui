@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Brui.Components
 {
     [RequireComponent(typeof(NodeCollider))]
+    [DefaultExecutionOrder(NodeExecutionOrders.ScrollExecutionOrder)]
     public class NodeScroll : NodeComponent, INodeDrag
     {
         public NodeScrollSettings ScrollSettings;
@@ -19,16 +20,24 @@ namespace Brui.Components
             }
         }
 
+        private void Update()
+        {
+            
+        }
+
         public void OnBeginDrag(Vector2 position)
         {
+            Debug.Log("1");
         }
 
         public void OnEndDrag(Vector2 position)
         {
+            Debug.Log("3");
         }
 
         public void OnDrag(Vector2 position, Vector2 delta)
         {
+            Debug.Log("2");
         }
     }
 
