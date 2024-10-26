@@ -4,8 +4,6 @@ NOTES
 - Text ?
 - Horizontal support ?
 
-- Pointer enter, Pointer Exit,
-
 COMPONENTS
 - NodeCanvas => DONE
 - NodeTransform => DONE

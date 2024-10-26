@@ -1323,6 +1323,7 @@ GameObject:
   - component: {fileID: 1043645586}
   - component: {fileID: 1043645585}
   - component: {fileID: 1043645584}
+  - component: {fileID: 1043645588}
   m_Layer: 0
   m_Name: NodeScroll
   m_TagString: Untagged
@@ -1389,7 +1390,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.02, y: 20}
+  m_Size: {x: 5.09, y: 20}
   m_EdgeRadius: 0
 --- !u!114 &1043645585
 MonoBehaviour:
@@ -1437,7 +1438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TransformSettings:
-    SizeOffset: {x: 2.02, y: 0}
+    SizeOffset: {x: 5.09, y: 0}
     PositionOffset: {x: 0, y: 0}
     AnchorX:
       Min: 0.5
@@ -1445,8 +1446,20 @@ MonoBehaviour:
     AnchorY:
       Min: 0
       Max: 1
-  NodeSize: {x: 2.02, y: 20}
+  NodeSize: {x: 5.09, y: 20}
   NodeOrder: 5
+--- !u!114 &1043645588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043645582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d608549188424182bb5ebd44cad22db3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1212226336
 GameObject:
   m_ObjectHideFlags: 0
