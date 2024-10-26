@@ -2,13 +2,11 @@ using UnityEngine;
 
 namespace Brui.Components
 {
-    [RequireComponent(typeof(NodeTransform))]
     [RequireComponent(typeof(SpriteRenderer))]
     [ExecuteAlways]
-    public class NodeImage : MonoBehaviour
+    public class NodeImage : NodeComponent
     {
         public bool preserveAspect;
-        public NodeTransform NodeTransform { get; private set; }
         public SpriteRenderer Image { get; private set; }
 
         private Vector2 _latestNodeSize;
@@ -16,19 +14,9 @@ namespace Brui.Components
         private bool _latestPreserveAspectState;
         private int _latestNodeOrder;
 
-        private void OnValidate()
+        protected override void SetComponents()
         {
-            SetComponents();
-        }
-
-        private void Awake()
-        {
-            SetComponents();
-        }
-
-        private void SetComponents()
-        {
-            NodeTransform = GetComponent<NodeTransform>();
+            base.SetComponents();
             Image = GetComponent<SpriteRenderer>();
         }
 

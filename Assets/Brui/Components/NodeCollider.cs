@@ -3,13 +3,11 @@ using UnityEngine;
 
 namespace Brui.Components
 {
-    [RequireComponent(typeof(NodeTransform))]
     [ExecuteAlways]
-    public class NodeCollider : MonoBehaviour
+    public class NodeCollider : NodeComponent
     {
         [SerializeField] private ENodeCollider _nodeColliderType;
         [SerializeField] private NodeColliderReferences _colliderReferences;
-        public NodeTransform NodeTransform { get; private set; }
 
         private ENodeCollider _latestNodeColliderType;
         private Vector2 _latestNodeSize;
@@ -18,21 +16,6 @@ namespace Brui.Components
         private Vector2 _boxColliderSize;
         private Vector2 _capsuleColliderSize;
         private CapsuleDirection2D _capsuleDirection;
-
-        private void OnValidate()
-        {
-            SetComponents();
-        }
-
-        private void Awake()
-        {
-            SetComponents();
-        }
-
-        private void SetComponents()
-        {
-            NodeTransform = GetComponent<NodeTransform>();
-        }
 
         private void Update()
         {

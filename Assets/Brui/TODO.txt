@@ -26,3 +26,7 @@ EVENT HANDLERS
 - INodePointerBeginDrag
 - INodePointerEndDrag
 - INodePointerDrag
+
+ORDER
+
+pointerdown => begin drag => drag => pointer up => end drag => click

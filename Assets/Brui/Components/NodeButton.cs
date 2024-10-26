@@ -4,31 +4,19 @@ using UnityEngine;
 
 namespace Brui.Components
 {
-    [RequireComponent(typeof(NodeTransform))]
     [RequireComponent(typeof(NodeImage))]
     [RequireComponent(typeof(NodeCollider))]
-    public class NodeButton : MonoBehaviour, INodePointerClick, INodePointerDown, INodePointerUp
+    public class NodeButton : NodeComponent, INodePointerClick, INodePointerDown, INodePointerUp
     {
-        public NodeTransform NodeTransform { get; private set; }
         public NodeImage NodeImage { get; private set; }
         
         public NodeButtonSettings ButtonSettings;
         public event Action OnButtonClick;
 
-        private void OnValidate()
+        protected override void SetComponents()
         {
-            SetComponents();
-        }
-
-        private void Awake()
-        {
-            SetComponents();
-        }
-
-        private void SetComponents()
-        {
+            base.SetComponents();
             NodeImage = GetComponent<NodeImage>();
-            NodeTransform = GetComponent<NodeTransform>();
         }
 
         public void OnClick()
