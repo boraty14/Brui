@@ -61,13 +61,14 @@ namespace Brui.Components
             int childCount = nodeParent.childCount;
             for (int i = 0; i < childCount; i++)
             {
-                var child = transform.GetChild(i);
+                var child = nodeParent.GetChild(i);
                 if (child.TryGetComponent<NodeLayout>(out var nodeLayout))
                 {
                     ResolveLayout(nodeLayout, parentSize);
                     continue;
                 }
 
+                
                 ResolveNode(child.GetComponent<NodeTransform>(), parentSize);
             }
         }
@@ -107,6 +108,8 @@ namespace Brui.Components
                 childNode.TransformSettings.AnchorY.Min = isVertical ? 0f : 0.5f;
                 childNode.TransformSettings.AnchorY.Max = isVertical ? 0f : 0.5f;
                 childNode.NodeSize = childNode.TransformSettings.SizeOffset;
+                childNode.NodeOrder = _order;
+                _order++;
 
                 Vector2 offset = isVertical
                     ? isReverse

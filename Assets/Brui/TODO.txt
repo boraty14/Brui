@@ -31,3 +31,8 @@ EVENT HANDLERS
 ORDER
 
 pointerdown => begin drag => drag => pointer up => end drag => click
+
+DOC
+- NodeSize is final and set from canvas (not changeable externally)
+It decides nodes final size when all properties applied. 
+- No Anchoring so pivot is always centered.
