@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Brui.Components
 {
     [ExecuteAlways]
-    [DefaultExecutionOrder(NodeExecutionOrders.CanvasExecutionOrder)]
+    [DefaultExecutionOrder(NodeConstants.CanvasExecutionOrder)]
     public class NodeCanvas : MonoBehaviour
     {
         public NodeCamera nodeCamera;
@@ -81,6 +81,32 @@ namespace Brui.Components
 
         private void ResolveLayout(NodeLayout nodeLayout, Vector2 parentSize)
         {
+            bool isVertical = nodeLayout.layoutType == ENodeLayout.Vertical;
+            
+            if (nodeLayout.TryGetComponent<NodeScrollView>(out var nodeScrollView))
+            {
+                int scrollViewChildCount = nodeScrollView.transform.childCount;
+                float scrollSize = scrollViewChildCount * nodeScrollView.NodeScroll.ScrollSettings.ItemSize;
+                if (isVertical)
+                {
+                    nodeScrollView.NodeTransform.TransformSettings.AnchorX.Min = 0f;
+                    nodeScrollView.NodeTransform.TransformSettings.AnchorX.Max = 1f;
+                    nodeScrollView.NodeTransform.TransformSettings.AnchorY.Min = 0.5f;
+                    nodeScrollView.NodeTransform.TransformSettings.AnchorY.Max = 0.5f;
+                    nodeScrollView.NodeTransform.TransformSettings.SizeOffset =
+                        new Vector2(0f, scrollSize);
+                }
+                else
+                {
+                    nodeScrollView.NodeTransform.TransformSettings.AnchorX.Min = 0.5f;
+                    nodeScrollView.NodeTransform.TransformSettings.AnchorX.Max = 0.5f;
+                    nodeScrollView.NodeTransform.TransformSettings.AnchorY.Min = 0f;
+                    nodeScrollView.NodeTransform.TransformSettings.AnchorY.Max = 1f;
+                    nodeScrollView.NodeTransform.TransformSettings.SizeOffset =
+                        new Vector2(scrollSize, 0f);
+                }
+            }
+            
             SetNodeTransform(nodeLayout.NodeTransform, parentSize);
 
             int childCount = nodeLayout.transform.childCount;
@@ -89,7 +115,6 @@ namespace Brui.Components
                 return;
             }
 
-            bool isVertical = nodeLayout.layoutType == ENodeLayout.Vertical;
             float interval = isVertical
                 ? nodeLayout.NodeTransform.NodeSize.y / (childCount + 1)
                 : nodeLayout.NodeTransform.NodeSize.x / (childCount + 1);

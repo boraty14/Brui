@@ -13,6 +13,7 @@ namespace Brui.Components
         public NodeImage NodeImage { get; private set; }
         public SpriteMask SpriteMask { get; private set; }
         private NodeScrollView _scrollView;
+        private NodeScroll _parentScroll;
         
         protected override void SetComponents()
         {
@@ -29,7 +30,17 @@ namespace Brui.Components
                     viewObject.transform.SetParent(transform);
                 }
 
-                _scrollView = transform.GetChild(0).GetComponent<NodeScrollView>();
+                var firstChild = transform.GetChild(0);
+                _scrollView = firstChild.GetComponent<NodeScrollView>();
+                if (_scrollView == null)
+                {
+                    _scrollView = firstChild.gameObject.AddComponent<NodeScrollView>();
+                }
+            }
+
+            if (ScrollSettings.PropagateScroll)
+            {
+                _parentScroll = GetComponentInParent<NodeScroll>(true);
             }
         }
 
@@ -40,20 +51,36 @@ namespace Brui.Components
 
         public void OnBeginDrag(Vector2 position)
         {
+            if (ScrollSettings.PropagateScroll)
+            {
+                _parentScroll.OnBeginDrag(position);
+            }
         }
 
         public void OnEndDrag(Vector2 position)
         {
+            if (ScrollSettings.PropagateScroll)
+            {
+                _parentScroll.OnEndDrag(position);
+            }
         }
 
         public void OnDrag(Vector2 position, Vector2 delta)
         {
+            if (ScrollSettings.PropagateScroll)
+            {
+                _parentScroll.OnDrag(position, delta);
+            }
+            
             var viewSize = _scrollView.NodeTransform.NodeSize;
             var viewPosition = _scrollView.transform.localPosition;
 
-            if (ScrollSettings.IsHorizontal)
+            switch (_scrollView.NodeLayout.layoutType)
             {
-                
+                case ENodeLayout.Vertical:
+                    break;
+                case ENodeLayout.Horizontal:
+                    break;
             }
         }
     }
@@ -61,8 +88,8 @@ namespace Brui.Components
     [Serializable]
     public class NodeScrollSettings
     {
-        public bool IsHorizontal;
-        public bool IsVertical;
         public float ScrollSpeed = 1f;
+        public float ItemSize = 1f;
+        public bool PropagateScroll;
     }
 }
