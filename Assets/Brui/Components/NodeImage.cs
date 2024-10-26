@@ -18,6 +18,10 @@ namespace Brui.Components
         {
             base.SetComponents();
             Image = GetComponent<SpriteRenderer>();
+            if (Image.sprite == null)
+            {
+                Image.sprite = Resources.Load<Sprite>("4x4");
+            }
         }
 
         private void Update()

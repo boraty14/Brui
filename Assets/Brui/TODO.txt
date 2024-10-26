@@ -4,6 +4,8 @@ NOTES
 - Text Input implementation
 - Text ?
 
+- Pointer enter, Pointer Exit,
+
 COMPONENTS
 - NodeCanvas
 - NodeTransform => DONE

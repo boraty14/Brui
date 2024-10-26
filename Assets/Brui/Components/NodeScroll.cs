@@ -8,6 +8,16 @@ namespace Brui.Components
     public class NodeScroll : NodeComponent, INodeDrag
     {
         public NodeScrollSettings ScrollSettings;
+        private NodeTransform _scrollView;
+
+        protected override void SetComponents()
+        {
+            base.SetComponents();
+            if (_scrollView == null)
+            {
+                
+            }
+        }
 
         public void OnBeginDrag(Vector2 position)
         {
@@ -27,5 +37,6 @@ namespace Brui.Components
     {
         public bool IsHorizontal;
         public bool IsVertical;
+        public float ScrollSpeed = 1f;
     }
 }

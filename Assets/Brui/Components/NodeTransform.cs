@@ -16,7 +16,8 @@ namespace Brui.Components
             Gizmos.color = Color.green;
 
             Vector3 position = transform.position;
-            Vector3 size = new Vector3(NodeSize.x, NodeSize.y, 0);
+            var localScale = transform.localScale;
+            Vector3 size = new Vector3(NodeSize.x * localScale.x, NodeSize.y * localScale.y, 0);
             Gizmos.DrawWireCube(position, size);
         }
     }

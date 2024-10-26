@@ -2,6 +2,8 @@ namespace Brui.EventHandlers
 {
     public interface INodePointerClick
     {
-        void OnClick();
+        void OnStartClick();
+        void OnCompleteClick();
+        void OnCancelClick();
     }
 }

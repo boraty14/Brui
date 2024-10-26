@@ -6,7 +6,7 @@ namespace Brui.Components
 {
     [RequireComponent(typeof(NodeImage))]
     [RequireComponent(typeof(NodeCollider))]
-    public class NodeButton : NodeComponent, INodePointerClick, INodePointerDown, INodePointerUp
+    public class NodeButton : NodeComponent, INodePointerClick
     {
         public NodeImage NodeImage { get; private set; }
         
@@ -19,18 +19,25 @@ namespace Brui.Components
             NodeImage = GetComponent<NodeImage>();
         }
 
-        public void OnClick()
+        public void OnStartClick()
         {
+            transform.localScale = Vector3.one * ButtonSettings.ClickStartScale;
+            NodeImage.Image.color = ButtonSettings.ClickStartColor;
+        }
+
+        public void OnCompleteClick()
+        {
+            ResetState();
+            OnButtonClick?.Invoke();
+        }
+        
+        public void OnCancelClick()
+        {
+            ResetState();
             OnButtonClick?.Invoke();
         }
 
-        public void OnPointerDown(Vector2 position)
-        {
-            transform.localScale = Vector3.one * ButtonSettings.PointerDownScale;
-            NodeImage.Image.color = ButtonSettings.PointerDownColor;
-        }
-
-        public void OnPointerUp(Vector2 position)
+        private void ResetState()
         {
             transform.localScale = Vector3.one;
             NodeImage.Image.color = Color.white;
@@ -40,7 +47,7 @@ namespace Brui.Components
     [Serializable]
     public class NodeButtonSettings
     {
-        [Range(0f, 1f)] public float PointerDownScale;
-        public Color PointerDownColor;
+        [Range(0f, 1f)] public float ClickStartScale = 0.8f;
+        public Color ClickStartColor = Color.grey;
     }
 }

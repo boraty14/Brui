@@ -12,7 +12,7 @@ namespace Brui.Editor
             if (Selection.activeGameObject != null)
             {
                 // Create a new empty GameObject
-                GameObject newChild = new GameObject("NewNode");
+                GameObject newChild = new GameObject("Node");
 
                 // Set the newly created object as a child of the selected GameObject
                 newChild.transform.parent = Selection.activeGameObject.transform;
@@ -33,7 +33,7 @@ namespace Brui.Editor
             if (Selection.activeGameObject != null)
             {
                 // Create a new empty GameObject
-                GameObject newChild = new GameObject("NewNode");
+                GameObject newChild = new GameObject("NodeImage");
 
                 // Set the newly created object as a child of the selected GameObject
                 newChild.transform.parent = Selection.activeGameObject.transform;
@@ -54,7 +54,7 @@ namespace Brui.Editor
             if (Selection.activeGameObject != null)
             {
                 // Create a new empty GameObject
-                GameObject newChild = new GameObject("NewNode");
+                GameObject newChild = new GameObject("NodeButton");
 
                 // Set the newly created object as a child of the selected GameObject
                 newChild.transform.parent = Selection.activeGameObject.transform;
@@ -75,7 +75,7 @@ namespace Brui.Editor
             if (Selection.activeGameObject != null)
             {
                 // Create a new empty GameObject
-                GameObject newChild = new GameObject("NewNode");
+                GameObject newChild = new GameObject("NodeScroll");
 
                 // Set the newly created object as a child of the selected GameObject
                 newChild.transform.parent = Selection.activeGameObject.transform;
