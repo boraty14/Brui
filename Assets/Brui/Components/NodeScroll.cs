@@ -27,17 +27,14 @@ namespace Brui.Components
 
         public void OnBeginDrag(Vector2 position)
         {
-            Debug.Log("1");
         }
 
         public void OnEndDrag(Vector2 position)
         {
-            Debug.Log("3");
         }
 
         public void OnDrag(Vector2 position, Vector2 delta)
         {
-            Debug.Log("2");
         }
     }
 

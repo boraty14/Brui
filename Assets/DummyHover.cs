@@ -7,12 +7,10 @@ namespace DefaultNamespace
     {
         public void OnPointerEnter()
         {
-            Debug.Log("a");            
         }
 
         public void OnPointerExit()
         {
-            Debug.Log("b");            
         }
     }
 }

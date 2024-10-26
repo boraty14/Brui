@@ -115,7 +115,8 @@ namespace Brui.Interaction
             if (isPointerJustReleased)
             {
                 var hitCollider = _hits[0].collider;
-                if (!IsPointerUpSet && hitCollider.TryGetComponent<INodePointerUp>(out _nodePointerUp))
+                if (!IsPointerUpSet && hitCount > 0 &&
+                    hitCollider.TryGetComponent<INodePointerUp>(out _nodePointerUp))
                 {
                     _nodePointerUp.OnPointerUp(pointerPosition);
                 }
@@ -127,7 +128,7 @@ namespace Brui.Interaction
 
                 if (IsPointerClickSet)
                 {
-                    if (_clickTimer < _clickInterval &&
+                    if (_clickTimer < _clickInterval && hitCount > 0 &&
                         hitCollider.TryGetComponent<INodePointerClick>(out var nodePointerClick) &&
                         nodePointerClick == _nodePointerClick)
                     {

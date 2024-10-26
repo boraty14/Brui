@@ -2,7 +2,10 @@ NOTES
 - AddScroll ( With dynamic content size update)
 - Text Input implementation
 - Text ?
-- Horizontal support ?
+
+FINAL
+- Add script images
+- Turn it into github package
 
 COMPONENTS
 - NodeCanvas => DONE
