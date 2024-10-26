@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Brui.EventHandlers;
 using UnityEngine;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace Brui.Interaction
 {
@@ -53,6 +54,12 @@ namespace Brui.Interaction
 
         void Update()
         {
+            for (int i = 0; i < Touch.activeFingers.Count; i++)
+            {
+                var finger = Touch.activeFingers[i];
+                Debug.Log($"i {i} fingerindex {finger.index}");
+            }
+            
             Vector2 pointerPosition = _camera.ScreenToWorldPoint(_nodeInputFetcher.GetPointerPosition());
             int hitCount =
                 Physics2D.RaycastNonAlloc(pointerPosition, Vector2.zero, _hits, Mathf.Infinity, _nodeUILayerMask);
