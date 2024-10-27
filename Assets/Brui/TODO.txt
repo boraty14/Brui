@@ -1,6 +1,5 @@
 NOTES
 - Add Scroll To (index and ratio, scroll 0 at start)
-- Inertia ???
 - Text Input implementation
 - Text ?
 
