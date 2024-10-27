@@ -11,6 +11,7 @@ namespace Brui.Components
 
         public NodeLayout NodeLayout { get; private set; }
         public NodeScroll NodeScroll { get; private set; }
+        public int ElementCount => transform.childCount;
 
         public override void SetComponents()
         {

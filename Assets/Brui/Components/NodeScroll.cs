@@ -48,6 +48,11 @@ namespace Brui.Components
             }
         }
 
+        private void Start()
+        {
+            ScrollTo(ScrollSettings.StartScroll);
+        }
+
         private void Update()
         {
             SetLimits();
@@ -120,6 +125,7 @@ namespace Brui.Components
 
         public void ScrollTo(float ratio)
         {
+            ratio = _scrollView.NodeLayout.isReverse ? 1f - ratio : ratio;
             var scrollSize = _scrollView.ScrollSize;
             var scrollViewNode = _scrollView.NodeTransform;
 
@@ -133,12 +139,8 @@ namespace Brui.Components
 
                     float verticalStartLimit = (NodeTransform.NodeSize.y - scrollSize) * 0.5f;
                     float verticalEndLimit = (-NodeTransform.NodeSize.y + scrollSize) * 0.5f;
-                    float verticalPosition = 0f;
-
-
-                    verticalPosition = Mathf.Clamp(scrollViewNode.TransformSettings.PositionOffset.y,
-                        verticalStartLimit, verticalEndLimit);
-                    scrollViewNode.TransformSettings.PositionOffset.y = verticalPosition;
+                    scrollViewNode.TransformSettings.PositionOffset.y =
+                        Mathf.Lerp(verticalStartLimit, verticalEndLimit, ratio);
                     break;
                 case ENodeLayout.Horizontal:
                     if (scrollViewNode.NodeSize.x < NodeTransform.NodeSize.x)
@@ -148,23 +150,21 @@ namespace Brui.Components
 
                     float horizontalStartLimit = (-NodeTransform.NodeSize.x + scrollSize) * 0.5f;
                     float horizontalEndLimit = (NodeTransform.NodeSize.y - scrollSize) * 0.5f;
-                    float horizontalPosition = 0f;
 
-
-                    horizontalPosition = Mathf.Clamp(scrollViewNode.TransformSettings.PositionOffset.x,
-                        horizontalEndLimit, horizontalStartLimit);
-                    scrollViewNode.TransformSettings.PositionOffset.x = horizontalPosition;
+                    scrollViewNode.TransformSettings.PositionOffset.x =
+                        Mathf.Lerp(horizontalEndLimit, horizontalStartLimit, ratio);
                     break;
             }
         }
 
         public void ScrollTo(int itemIndex)
         {
+            ScrollTo(Mathf.Clamp01((float)itemIndex / _scrollView.ElementCount));
         }
 
         public float GetItemScrollRatio(int itemIndex)
         {
-            return 0f;
+            return Mathf.Clamp01((float)itemIndex / _scrollView.ElementCount);
         }
 
         public void OnBeginDrag(Vector2 position)
@@ -212,6 +212,7 @@ namespace Brui.Components
         public float ScrollSpeed = 1f;
         public float ItemSize = 1f;
         public float Inertia = 10f;
+        [Range(0f, 1f)] public float StartScroll = 0f;
         public bool PropagateScroll;
     }
 }

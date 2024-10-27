@@ -1,5 +1,4 @@
 NOTES
-- Add Scroll To (index and ratio, scroll 0 at start)
 - Text Input implementation
 - Text ?
 
