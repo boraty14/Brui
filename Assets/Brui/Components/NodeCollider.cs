@@ -11,7 +11,6 @@ namespace Brui.Components
 
         private ENodeCollider _latestNodeColliderType;
         private Vector2 _latestNodeSize;
-        private int _latestNodeOrder;
 
         private float _circleColliderSize;
         private Vector2 _boxColliderSize;
@@ -22,14 +21,12 @@ namespace Brui.Components
         {
             if (_latestNodeColliderType == _nodeColliderType &&
                 _latestNodeSize == NodeTransform.NodeSize &&
-                _latestNodeOrder == NodeTransform.NodeOrder &&
                 IsColliderSizeSame())
             {
                 return;
             }
 
             var nodeSize = NodeTransform.NodeSize;
-            var nodeOrder = NodeTransform.NodeOrder;
             switch (_nodeColliderType)
             {
                 case ENodeCollider.Box:
@@ -49,7 +46,6 @@ namespace Brui.Components
                     }
 
                     _colliderReferences.BoxCollider.size = nodeSize;
-                    _colliderReferences.BoxCollider.layerOverridePriority = nodeOrder;
                     _boxColliderSize = nodeSize;
                     break;
                 case ENodeCollider.Circle:
@@ -69,7 +65,6 @@ namespace Brui.Components
                     }
 
                     _colliderReferences.CircleCollider.radius = nodeSize.x * 0.5f;
-                    _colliderReferences.CircleCollider.layerOverridePriority = nodeOrder;
                     _circleColliderSize = nodeSize.x * 0.5f;
                     break;
                 case ENodeCollider.Capsule:
@@ -92,14 +87,12 @@ namespace Brui.Components
                         ? CapsuleDirection2D.Horizontal
                         : CapsuleDirection2D.Vertical;
                     _colliderReferences.CapsuleCollider.size = nodeSize;
-                    _colliderReferences.CapsuleCollider.layerOverridePriority = nodeOrder;
                     _capsuleColliderSize = nodeSize;
                     break;
             }
 
             _latestNodeColliderType = _nodeColliderType;
             _latestNodeSize = NodeTransform.NodeSize;
-            _latestNodeOrder = NodeTransform.NodeOrder;
         }
 
         private bool IsColliderSizeSame()

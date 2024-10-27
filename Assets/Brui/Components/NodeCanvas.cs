@@ -32,7 +32,7 @@ namespace Brui.Components
             Vector2 screenSize = _screenSize;
             float width = cameraVerticalSize * (screenSize.x / screenSize.y) * 2f;
             float height = cameraVerticalSize * 2f;
-            
+
             // TODO SAFE AREA
             Vector3 offset = Vector3.zero;
             if (ApplySafeAreaX)
@@ -42,6 +42,7 @@ namespace Brui.Components
                 offset.x += -(rightRatio - leftRatio) * 0.5f * width;
                 width *= 1 - (leftRatio + rightRatio);
             }
+
             if (ApplySafeAreaY)
             {
                 float bottomRatio = _safeArea.y / _screenSize.y;
@@ -49,7 +50,7 @@ namespace Brui.Components
                 offset.y += -(topRatio - bottomRatio) * 0.5f * height;
                 height *= 1 - (bottomRatio + topRatio);
             }
-            
+
             _canvasSize = new Vector2(width, height);
 
             transform.position = nodeCamera.transform.position + Vector3.forward * nodeCamera.DistanceToCamera + offset;
@@ -68,7 +69,7 @@ namespace Brui.Components
                     continue;
                 }
 
-                
+
                 ResolveNode(child.GetComponent<NodeTransform>(), parentSize);
             }
         }
@@ -82,7 +83,7 @@ namespace Brui.Components
         private void ResolveLayout(NodeLayout nodeLayout, Vector2 parentSize)
         {
             bool isVertical = nodeLayout.layoutType == ENodeLayout.Vertical;
-            
+
             if (nodeLayout.TryGetComponent<NodeScrollView>(out var nodeScrollView))
             {
                 int scrollViewChildCount = nodeScrollView.transform.childCount;
@@ -107,7 +108,7 @@ namespace Brui.Components
                         new Vector2(scrollSize, 0f);
                 }
             }
-            
+
             SetNodeTransform(nodeLayout.NodeTransform, parentSize);
 
             int childCount = nodeLayout.transform.childCount;
@@ -124,7 +125,7 @@ namespace Brui.Components
             Vector2 startPosition = isVertical
                 ? new Vector2(0f, -nodeLayout.NodeTransform.NodeSize.y * 0.5f)
                 : new Vector2(-nodeLayout.NodeTransform.NodeSize.x * 0.5f, 0f);
-            
+
             for (int i = 0; i < childCount; i++)
             {
                 var child = nodeLayout.transform.GetChild(i);
@@ -145,7 +146,9 @@ namespace Brui.Components
                         ? new Vector2((childCount - i) * interval, 0f)
                         : new Vector2((i + 1) * interval, 0f);
 
-                childNode.transform.localPosition = startPosition + offset;
+                var combinedPosition = startPosition + offset;
+                childNode.transform.localPosition = new Vector3(combinedPosition.x, combinedPosition.y,
+                    childNode.NodeOrder * NodeConstants.NodeSortOffset);
                 ResolveChildNodes(child, childNode.NodeSize);
             }
         }
@@ -164,15 +167,15 @@ namespace Brui.Components
             // position
             Vector2 location = new Vector2((anchorXMin + anchorXMax) * 0.5f, (anchorYMin + anchorYMax) * 0.5f) +
                                nodeTransform.TransformSettings.PositionOffset;
-            
-            nodeTransform.transform.localPosition = location;
+
+            nodeTransform.transform.localPosition = new Vector3(location.x, location.y,
+                nodeTransform.NodeOrder * NodeConstants.NodeSortOffset);
 
             // size
             nodeTransform.SetNodeSize(new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
                                       nodeTransform.TransformSettings.SizeOffset);
-            
         }
-        
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
