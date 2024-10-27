@@ -10,13 +10,13 @@ namespace Brui.Components
     [ExecuteAlways]
     public class NodeScroll : NodeComponent, INodeDrag
     {
-        public NodeScrollSettings ScrollSettings;
+        public NodeScrollSettings ScrollSettings = new();
         public NodeImage NodeImage { get; private set; }
         public SpriteMask SpriteMask { get; private set; }
         private NodeScrollView _scrollView;
         private NodeScroll _parentScroll;
 
-        protected override void SetComponents()
+        public override void SetComponents()
         {
             base.SetComponents();
             NodeImage = GetComponent<NodeImage>();
@@ -37,6 +37,7 @@ namespace Brui.Components
                 {
                     _scrollView = firstChild.gameObject.AddComponent<NodeScrollView>();
                 }
+                _scrollView.SetComponents();
             }
 
             if (ScrollSettings.PropagateScroll)

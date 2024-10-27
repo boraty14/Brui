@@ -13,7 +13,7 @@ namespace Brui.Components
         public NodeButtonSettings ButtonSettings;
         public event Action OnButtonClick;
 
-        protected override void SetComponents()
+        public override void SetComponents()
         {
             base.SetComponents();
             NodeImage = GetComponent<NodeImage>();

@@ -5,7 +5,7 @@ namespace Brui.Components
 {
     public class NodeTransform : MonoBehaviour
     {
-        public NodeTransformSettings TransformSettings;
+        public NodeTransformSettings TransformSettings = new();
         private NodeCanvas _nodeCanvas;
 
         [field:SerializeField] public Vector2 NodeSize { get; private set; }

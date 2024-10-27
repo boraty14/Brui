@@ -14,7 +14,7 @@ namespace Brui.Components
         private bool _latestPreserveAspectState;
         private int _latestNodeOrder;
 
-        protected override void SetComponents()
+        public override void SetComponents()
         {
             base.SetComponents();
             Image = GetComponent<SpriteRenderer>();

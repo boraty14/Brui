@@ -16,7 +16,7 @@ namespace Brui.Components
 
         private static readonly Vector2 TextVector = new Vector2(0.5f, 0.5f);
         
-        protected override void SetComponents()
+        public override void SetComponents()
         {
             base.SetComponents();
             Text = GetComponent<TextMeshPro>();

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Brui.EventHandlers;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace Brui.Interaction
@@ -38,6 +39,7 @@ namespace Brui.Interaction
 
         private void Awake()
         {
+            EnhancedTouchSupport.Enable();
             _camera = GetComponent<Camera>();
             _camera.orthographic = true;
             _hits = new RaycastHit2D[_maxHits];
@@ -45,7 +47,7 @@ namespace Brui.Interaction
             _currentlyHoveredNodes = new List<INodePointerHover>();
             _exitingHoverNodes = new List<INodePointerHover>();
 
-#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS)
             _nodeInputFetcher = new MobileInputFetcher();
 #else
             _nodeInputFetcher = new DesktopInputFetcher();

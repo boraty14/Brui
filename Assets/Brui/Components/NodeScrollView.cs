@@ -12,7 +12,7 @@ namespace Brui.Components
         public NodeLayout NodeLayout { get; private set; }
         public NodeScroll NodeScroll { get; private set; }
 
-        protected override void SetComponents()
+        public override void SetComponents()
         {
             base.SetComponents();
             NodeLayout = GetComponent<NodeLayout>();

@@ -17,7 +17,7 @@ namespace Brui.Components
             SetComponents();
         }
 
-        protected virtual void SetComponents()
+        public virtual void SetComponents()
         {
             NodeTransform = GetComponent<NodeTransform>();
         }
