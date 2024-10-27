@@ -70,7 +70,12 @@ namespace Brui.Components
                 }
 
 
-                ResolveNode(child.GetComponent<NodeTransform>(), parentSize);
+                var childNode = child.GetComponent<NodeTransform>();
+                if (childNode == null)
+                {
+                    childNode = child.gameObject.AddComponent<NodeTransform>();
+                }
+                ResolveNode(childNode, parentSize);
             }
         }
 
