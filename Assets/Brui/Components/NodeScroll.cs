@@ -7,6 +7,7 @@ namespace Brui.Components
     [RequireComponent(typeof(NodeCollider))]
     [RequireComponent(typeof(NodeImage))]
     [RequireComponent(typeof(SpriteMask))]
+    [DefaultExecutionOrder(NodeConstants.ScrollExecutionOrder)]
     [ExecuteAlways]
     public class NodeScroll : NodeComponent, INodeDrag
     {
