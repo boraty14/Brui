@@ -12,6 +12,7 @@ namespace Brui.Interaction
         [SerializeField] private LayerMask _nodeUILayerMask;
         [SerializeField] private int _maxHits = 10;
         [SerializeField] private float _clickInterval = 1f;
+        [SerializeField] private float _dragStartThreshold = 1f;
         [SerializeField] private Camera _camera;
 
         private RaycastHit2D[] _hits;
@@ -29,6 +30,8 @@ namespace Brui.Interaction
         private INodePointerClick _nodePointerClick;
         private float _clickTimer;
         private Vector2 _latestPointerPosition;
+        private Vector2 _pointerDownPosition;
+        private bool _isDragging;
 
         public float VerticalSize => _camera.orthographicSize;
         private bool IsPointerDownSet => _nodePointerDown != null;
@@ -126,6 +129,7 @@ namespace Brui.Interaction
                 if (IsDragSet)
                 {
                     _nodeDrag.OnEndDrag(pointerPosition);
+                    _isDragging = false;
                 }
 
                 if (IsPointerClickSet)
@@ -149,11 +153,29 @@ namespace Brui.Interaction
             {
                 if (IsDragSet)
                 {
-                    _nodeDrag.OnDrag(pointerPosition, pointerPosition - _latestPointerPosition);
-                    _latestPointerPosition = pointerPosition;
+                    if (_isDragging)
+                    {
+                        _nodeDrag.OnDrag(pointerPosition, pointerPosition - _latestPointerPosition);
+                        _latestPointerPosition = pointerPosition;
+                    }
+                    else if (Vector2.Distance(pointerPosition, _pointerDownPosition) > _dragStartThreshold)
+                    {
+                        _isDragging = true;
+                        _nodeDrag.OnBeginDrag(pointerPosition);
+                        if (IsPointerClickSet)
+                        {
+                            _nodePointerClick.OnCancelClick();
+                            _nodePointerClick = null;
+                        }
+                    }
                 }
 
                 return;
+            }
+
+            if (hitCount > 0)
+            {
+                _pointerDownPosition = pointerPosition;
             }
 
             for (int i = 0; i < hitCount; i++)
@@ -177,15 +199,7 @@ namespace Brui.Interaction
                         _nodePointerClick.OnStartClick();
                     }
 
-                    if (hit.collider.TryGetComponent<INodeDrag>(out _nodeDrag))
-                    {
-                        if (IsPointerClickSet)
-                        {
-                            _nodePointerClick.OnCancelClick();
-                            _nodePointerClick = null;
-                        }
-                        _nodeDrag.OnBeginDrag(pointerPosition);
-                    }
+                    hit.collider.TryGetComponent<INodeDrag>(out _nodeDrag);
                 }
             }
         }
