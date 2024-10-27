@@ -1,0 +1,16 @@
+{
+    "name": "Brui.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0e1dcaf62d8b6fb43ae2dcb908a418c5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
