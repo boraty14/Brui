@@ -38,15 +38,15 @@ namespace Brui.Components
             if (ApplySafeAreaX)
             {
                 float leftRatio = _safeArea.x / _screenSize.x;
-                float rightRatio = (_screenSize.x - _safeArea.width) / _screenSize.x;
-                offset.x += (rightRatio - leftRatio) * 0.5f * width;
+                float rightRatio = (_screenSize.x - (_safeArea.x + _safeArea.width)) / _screenSize.x;
+                offset.x += -(rightRatio - leftRatio) * 0.5f * width;
                 width *= 1 - (leftRatio + rightRatio);
             }
             if (ApplySafeAreaY)
             {
                 float bottomRatio = _safeArea.y / _screenSize.y;
-                float topRatio = (_screenSize.y - _safeArea.height) / _screenSize.y;
-                offset.y += (topRatio - bottomRatio) * 0.5f * height;
+                float topRatio = (_screenSize.y - (_safeArea.y + _safeArea.height)) / _screenSize.y;
+                offset.y += -(topRatio - bottomRatio) * 0.5f * height;
                 height *= 1 - (bottomRatio + topRatio);
             }
             
