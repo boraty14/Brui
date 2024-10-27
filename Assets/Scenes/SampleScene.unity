@@ -1187,6 +1187,7 @@ MonoBehaviour:
   ScrollSettings:
     ScrollSpeed: 2
     ItemSize: 10
+    Inertia: 10
     PropagateScroll: 0
 --- !u!331 &508543100
 SpriteMask:
