@@ -1,6 +1,5 @@
 NOTES
 - Text Input implementation
-- Text ?
 
 FINAL
 - Turn it into github package

@@ -152,8 +152,12 @@ namespace Brui.Components
                         : new Vector2((i + 1) * interval, 0f);
 
                 var combinedPosition = startPosition + offset;
-                childNode.transform.localPosition = new Vector3(combinedPosition.x, combinedPosition.y,
-                    childNode.NodeOrder * NodeConstants.NodeSortOffset);
+                child.localPosition = combinedPosition;
+
+                var currentPosition = child.position;
+                var nodeOffset = childNode.NodeOrder * NodeConstants.NodeSortOffset;
+                child.position = new Vector3(currentPosition.x, currentPosition.y, nodeOffset);
+                
                 ResolveChildNodes(child, childNode.NodeSize);
             }
         }
@@ -173,8 +177,11 @@ namespace Brui.Components
             Vector2 location = new Vector2((anchorXMin + anchorXMax) * 0.5f, (anchorYMin + anchorYMax) * 0.5f) +
                                nodeTransform.TransformSettings.PositionOffset;
 
-            nodeTransform.transform.localPosition = new Vector3(location.x, location.y,
-                nodeTransform.NodeOrder * NodeConstants.NodeSortOffset);
+            nodeTransform.transform.localPosition = location;
+            
+            var currentPosition = nodeTransform.transform.position;
+            var nodeOffset = nodeTransform.NodeOrder * NodeConstants.NodeSortOffset;
+            nodeTransform.transform.position = new Vector3(currentPosition.x, currentPosition.y, nodeOffset);
 
             // size
             nodeTransform.SetNodeSize(new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +

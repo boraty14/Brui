@@ -7,7 +7,12 @@ namespace Brui.Components
     [ExecuteAlways]
     public class NodeText : NodeComponent
     {
-        public TextMeshPro Text { get; private set; }
+        public TextMeshPro TMPText { get; private set; }
+        public string Text
+        {
+            get => TMPText.text;
+            set => TMPText.text = value;
+        }
         private RectTransform _textRect;
         
         private Vector2 _latestNodeSize;
@@ -17,8 +22,8 @@ namespace Brui.Components
         public override void SetComponents()
         {
             base.SetComponents();
-            Text = GetComponent<TextMeshPro>();
-            _textRect = Text.rectTransform;
+            TMPText = GetComponent<TextMeshPro>();
+            _textRect = TMPText.rectTransform;
         }
 
         private void Update()
