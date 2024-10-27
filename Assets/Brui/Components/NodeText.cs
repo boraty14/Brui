@@ -1,3 +1,4 @@
+using Brui.Attributes;
 using TMPro;
 using UnityEngine;
 
@@ -7,7 +8,8 @@ namespace Brui.Components
     [ExecuteAlways]
     public class NodeText : NodeComponent
     {
-        [field:SerializeField] public TextMeshPro TMPText { get; private set; }
+        [field: SerializeField] [field: ReadOnlyNode]
+        public TextMeshPro TMPText { get; private set; }
         public string Text
         {
             get => TMPText.text;

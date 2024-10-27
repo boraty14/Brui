@@ -2,6 +2,7 @@
 #define NATIVE_MOBILE 
 #endif
 
+using Brui.Attributes;
 using Brui.EventHandlers;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ namespace Brui.Components
     [RequireComponent(typeof(NodeText))]
     public class NodeTextInput : NodeComponent, INodePointerClick
     {
-        public NodeText NodeText { get; set; }
+        [field: SerializeField] [field: ReadOnlyNode]
+        public NodeText NodeText { get; private set; }
         private TouchScreenKeyboard _touchScreenKeyboard;
 
         public override void SetComponents()

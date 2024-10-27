@@ -1,4 +1,5 @@
 using System;
+using Brui.Attributes;
 using Brui.EventHandlers;
 using UnityEngine;
 
@@ -8,8 +9,9 @@ namespace Brui.Components
     [RequireComponent(typeof(NodeCollider))]
     public class NodeButton : NodeComponent, INodePointerClick
     {
-        [field:SerializeField] public NodeImage NodeImage { get; private set; }
-        
+        [field: SerializeField] [field: ReadOnlyNode]
+        public NodeImage NodeImage { get; private set; }
+
         public NodeButtonSettings ButtonSettings;
         public event Action OnButtonClick;
 
@@ -30,7 +32,7 @@ namespace Brui.Components
             ResetState();
             OnButtonClick?.Invoke();
         }
-        
+
         public void OnCancelClick()
         {
             ResetState();

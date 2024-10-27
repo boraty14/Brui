@@ -1,5 +1,6 @@
 NOTES
 - Text Input implementation
+- add readonly node
 
 FINAL
 - Turn it into github package

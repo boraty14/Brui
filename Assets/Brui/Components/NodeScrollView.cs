@@ -1,3 +1,4 @@
+using Brui.Attributes;
 using UnityEngine;
 
 namespace Brui.Components
@@ -9,8 +10,10 @@ namespace Brui.Components
         [Range(0f, 1f)] [field: SerializeField]
         public float PlacementRatio { get; private set; }
 
-        [field:SerializeField] public NodeLayout NodeLayout { get; private set; }
-        [field:SerializeField] public NodeScroll NodeScroll { get; private set; }
+        [field: SerializeField] [field: ReadOnlyNode]
+        public NodeLayout NodeLayout { get; private set; }
+        [field: SerializeField] [field: ReadOnlyNode]
+        public NodeScroll NodeScroll { get; private set; }
         public int ElementCount => transform.childCount;
 
         public override void SetComponents()

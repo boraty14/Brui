@@ -1,4 +1,5 @@
 using System;
+using Brui.Attributes;
 using Brui.EventHandlers;
 using UnityEngine;
 
@@ -11,7 +12,9 @@ namespace Brui.Components
     public class NodeScroll : NodeComponent, INodeDrag
     {
         public NodeScrollSettings ScrollSettings = new();
-        [field:SerializeField] public NodeImage NodeImage { get; private set; }
+        [field: SerializeField] [field: ReadOnlyNode]
+        public NodeImage NodeImage { get; private set; }
+        [field: SerializeField] [field: ReadOnlyNode]
         public SpriteMask SpriteMask { get; private set; }
         private NodeScrollView _scrollView;
         private NodeScroll _parentScroll;

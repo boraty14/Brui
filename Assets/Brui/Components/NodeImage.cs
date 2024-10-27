@@ -1,3 +1,4 @@
+using Brui.Attributes;
 using UnityEngine;
 
 namespace Brui.Components
@@ -7,6 +8,7 @@ namespace Brui.Components
     public class NodeImage : NodeComponent
     {
         public bool preserveAspect;
+        [field: SerializeField] [field: ReadOnlyNode]
         public SpriteRenderer Image { get; private set; }
 
         private Vector2 _latestNodeSize;
