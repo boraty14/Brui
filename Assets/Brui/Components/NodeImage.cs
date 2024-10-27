@@ -49,7 +49,7 @@ namespace Brui.Components
                 float nodeHeight = nodeSize.y;
                 float nodeAspectRatio = nodeHeight < 0.001f ? 0f : nodeWidth / nodeHeight;
                 
-                if (spriteAspectRatio > nodeAspectRatio) // (4,4) (2,4)
+                if (spriteAspectRatio > nodeAspectRatio)
                 {
                     Image.size = new Vector2(nodeSize.x, nodeSize.y * (nodeAspectRatio / spriteAspectRatio));
                 }

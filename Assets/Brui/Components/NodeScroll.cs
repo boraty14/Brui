@@ -38,8 +38,9 @@ namespace Brui.Components
                 {
                     _scrollView = firstChild.gameObject.AddComponent<NodeScrollView>();
                 }
-                _scrollView.SetComponents();
             }
+            _scrollView.SetComponents();
+
 
             if (ScrollSettings.PropagateScroll)
             {
