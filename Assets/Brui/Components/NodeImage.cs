@@ -10,9 +10,7 @@ namespace Brui.Components
         public SpriteRenderer Image { get; private set; }
 
         private Vector2 _latestNodeSize;
-        private Vector2 _latestSpriteSize;
         private bool _latestPreserveAspectState;
-        private int _latestNodeOrder;
 
         public override void SetComponents()
         {
@@ -27,17 +25,14 @@ namespace Brui.Components
         private void Update()
         {
             if (_latestNodeSize == NodeTransform.NodeSize &&
+                _latestNodeSize == Image.size &&
                 _latestPreserveAspectState == preserveAspect &&
-                _latestSpriteSize == Image.size &&
-                _latestNodeOrder == Image.sortingOrder &&
-                _latestNodeOrder == NodeTransform.NodeOrder &&
                 Image.drawMode == SpriteDrawMode.Sliced)
             {
                 return;
             }
             
             Image.drawMode = SpriteDrawMode.Sliced;
-            Image.sortingOrder = NodeTransform.NodeOrder;
             if (preserveAspect)
             {
                 float spriteWidth = Image.sprite.rect.width;
@@ -69,8 +64,6 @@ namespace Brui.Components
             
             _latestNodeSize = NodeTransform.NodeSize;
             _latestPreserveAspectState = preserveAspect;
-            _latestSpriteSize = Image.size;
-            _latestNodeOrder = Image.sortingOrder;
         }
     }
 }

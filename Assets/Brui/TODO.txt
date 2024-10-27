@@ -3,7 +3,6 @@ NOTES
 - Text ?
 
 FINAL
-- Add script images
 - Turn it into github package
 
 COMPONENTS
