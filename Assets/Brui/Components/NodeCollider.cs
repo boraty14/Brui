@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Brui.Components
 {
     [ExecuteAlways]
+    [DefaultExecutionOrder(NodeConstants.ColliderExecutionOrder)]
     public class NodeCollider : NodeComponent
     {
         [SerializeField] private ENodeCollider _nodeColliderType;
@@ -26,8 +27,10 @@ namespace Brui.Components
                 return;
             }
 
+            var currentLocalPosition = transform.localPosition;
             transform.localPosition =
-                new Vector3(0f, 0f, NodeConstants.NodeColliderOrderOffset * NodeTransform.NodeOrder);
+                new Vector3(currentLocalPosition.x, currentLocalPosition.y,
+                    NodeConstants.NodeColliderOrderOffset * NodeTransform.NodeOrder);
             var nodeSize = NodeTransform.NodeSize;
             switch (_nodeColliderType)
             {
@@ -67,7 +70,7 @@ namespace Brui.Components
                     }
 
                     _colliderReferences.CircleCollider.radius = nodeSize.x * 0.5f;
-                    _circleColliderSize = nodeSize.x  * 0.5f;
+                    _circleColliderSize = nodeSize.x * 0.5f;
                     break;
                 case ENodeCollider.Capsule:
                     if (_colliderReferences.CircleCollider != null)
