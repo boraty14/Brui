@@ -1,5 +1,5 @@
 NOTES
-- Text Input implementation
+- Text Input implementation(for desktop)
 
 FINAL
 - Turn it into github package

@@ -1,4 +1,5 @@
 using System;
+using Brui.Attributes;
 using UnityEngine;
 
 namespace Brui.Components
@@ -7,7 +8,7 @@ namespace Brui.Components
     public class NodeCollider : NodeComponent
     {
         [SerializeField] private ENodeCollider _nodeColliderType;
-        [SerializeField] private NodeColliderReferences _colliderReferences;
+        [ReadOnlyNode] [SerializeField] private NodeColliderReferences _colliderReferences;
 
         private ENodeCollider _latestNodeColliderType;
         private Vector2 _latestNodeSize;

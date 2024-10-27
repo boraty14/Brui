@@ -16,8 +16,8 @@ namespace Brui.Components
         public NodeImage NodeImage { get; private set; }
         [field: SerializeField] [field: ReadOnlyNode]
         public SpriteMask SpriteMask { get; private set; }
-        private NodeScrollView _scrollView;
-        private NodeScroll _parentScroll;
+        [ReadOnlyNode] [SerializeField] private NodeScrollView _scrollView;
+        [ReadOnlyNode] [SerializeField] private NodeScroll _parentScroll;
 
         public override void SetComponents()
         {

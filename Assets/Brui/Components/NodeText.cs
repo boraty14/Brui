@@ -15,7 +15,8 @@ namespace Brui.Components
             get => TMPText.text;
             set => TMPText.text = value;
         }
-        private RectTransform _textRect;
+        
+       [ReadOnlyNode] [SerializeField] private RectTransform _textRect;
         
         private Vector2 _latestNodeSize;
 

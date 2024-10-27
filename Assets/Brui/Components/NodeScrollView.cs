@@ -6,8 +6,8 @@ namespace Brui.Components
     [RequireComponent(typeof(NodeLayout))]
     public class NodeScrollView : NodeComponent
     {
-        public float ScrollSize;
-        [Range(0f, 1f)] [field: SerializeField]
+        [ReadOnlyNode] public float ScrollSize;
+        [field:Range(0f, 1f)] [field: SerializeField]
         public float PlacementRatio { get; private set; }
 
         [field: SerializeField] [field: ReadOnlyNode]
