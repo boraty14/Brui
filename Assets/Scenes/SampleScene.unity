@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScrollSettings:
-    ScrollSpeed: 1
+    ScrollSpeed: 2
     ItemSize: 10
     PropagateScroll: 0
 --- !u!331 &508543100
