@@ -7,7 +7,7 @@ namespace Brui.Components
     [ExecuteAlways]
     public class NodeText : NodeComponent
     {
-        public TextMeshPro TMPText { get; private set; }
+        [field:SerializeField] public TextMeshPro TMPText { get; private set; }
         public string Text
         {
             get => TMPText.text;

@@ -5,7 +5,7 @@ namespace Brui.Components
     [RequireComponent(typeof(NodeTransform))]
     public abstract class NodeComponent : MonoBehaviour
     {
-        public NodeTransform NodeTransform { get; private set; }
+        [field:SerializeField] public NodeTransform NodeTransform { get; private set; }
 
         private void OnValidate()
         {

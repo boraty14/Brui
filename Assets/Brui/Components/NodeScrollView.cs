@@ -9,8 +9,8 @@ namespace Brui.Components
         [Range(0f, 1f)] [field: SerializeField]
         public float PlacementRatio { get; private set; }
 
-        public NodeLayout NodeLayout { get; private set; }
-        public NodeScroll NodeScroll { get; private set; }
+        [field:SerializeField] public NodeLayout NodeLayout { get; private set; }
+        [field:SerializeField] public NodeScroll NodeScroll { get; private set; }
         public int ElementCount => transform.childCount;
 
         public override void SetComponents()

@@ -8,7 +8,7 @@ namespace Brui.Components
     [RequireComponent(typeof(NodeCollider))]
     public class NodeButton : NodeComponent, INodePointerClick
     {
-        public NodeImage NodeImage { get; private set; }
+        [field:SerializeField] public NodeImage NodeImage { get; private set; }
         
         public NodeButtonSettings ButtonSettings;
         public event Action OnButtonClick;

@@ -1,3 +1,7 @@
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#define NATIVE_MOBILE 
+#endif
+
 using Brui.EventHandlers;
 using UnityEngine;
 
@@ -8,7 +12,7 @@ namespace Brui.Components
     public class NodeTextInput : NodeComponent, INodePointerClick
     {
         public NodeText NodeText { get; set; }
-        private TouchScreenKeyboard _keyboard;
+        private TouchScreenKeyboard _touchScreenKeyboard;
 
         public override void SetComponents()
         {
@@ -22,13 +26,12 @@ namespace Brui.Components
 
         public void OnCompleteClick()
         {
-            if (_keyboard != null)
-            {
-                return;
-            }
-            _keyboard = TouchScreenKeyboard.Open(NodeText.Text, TouchScreenKeyboardType.Default,
-                false, false, false, false, "");
-            Debug.Log("opened");
+#if NATIVE_MOBILE
+            _touchScreenKeyboard = TouchScreenKeyboard.Open(NodeText.Text, TouchScreenKeyboardType.Default,
+                false, false, false, true, "");
+#else
+            
+#endif
         }
 
         public void OnCancelClick()
@@ -37,25 +40,29 @@ namespace Brui.Components
 
         private void Update()
         {
-            if (_keyboard == null)
+#if NATIVE_MOBILE
+            if (_touchScreenKeyboard == null)
             {
                 return;
             }
             
-            var status = _keyboard.status;
-            
+            var status = _touchScreenKeyboard.status;
+
             if (status == TouchScreenKeyboard.Status.Done ||
                 status == TouchScreenKeyboard.Status.Canceled ||
                 status == TouchScreenKeyboard.Status.LostFocus)
             {
-                _keyboard = null;
+                _touchScreenKeyboard = null;
                 return;
             }
-
-            if (_keyboard.active)
+            
+            if (_touchScreenKeyboard.active)
             {
-                NodeText.Text = _keyboard.text;
+                NodeText.Text = _touchScreenKeyboard.text;
             }
+#else
+            
+#endif
         }
     }
 }

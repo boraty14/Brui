@@ -11,7 +11,7 @@ namespace Brui.Components
     public class NodeScroll : NodeComponent, INodeDrag
     {
         public NodeScrollSettings ScrollSettings = new();
-        public NodeImage NodeImage { get; private set; }
+        [field:SerializeField] public NodeImage NodeImage { get; private set; }
         public SpriteMask SpriteMask { get; private set; }
         private NodeScrollView _scrollView;
         private NodeScroll _parentScroll;
