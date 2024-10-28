@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Brui.Components;
 using Brui.EventHandlers;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -28,6 +29,7 @@ namespace Brui.Interaction
         private INodePointerDown _nodePointerDown;
         private INodePointerUp _nodePointerUp;
         private INodePointerClick _nodePointerClick;
+        private NodeTextInput _nodeTextInput;
         private float _clickTimer;
         private Vector2 _latestPointerPosition;
         private Vector2 _pointerDownPosition;
@@ -38,6 +40,7 @@ namespace Brui.Interaction
         private bool IsPointerUpSet => _nodePointerUp != null;
         private bool IsPointerClickSet => _nodePointerClick != null;
         private bool IsDragSet => _nodeDrag != null;
+        private bool IsNodeTextInputSet => _nodeTextInput != null;
 
         private void Awake()
         {
@@ -173,6 +176,11 @@ namespace Brui.Interaction
                 return;
             }
 
+            if (IsNodeTextInputSet)
+            {
+                _nodeTextInput.CloseInput();
+            }
+
             if (hitCount > 0)
             {
                 _pointerDownPosition = pointerPosition;
@@ -197,6 +205,7 @@ namespace Brui.Interaction
                         hitCollider.TryGetComponent<INodePointerClick>(out _nodePointerClick))
                     {
                         _nodePointerClick.OnStartClick();
+                        hitCollider.TryGetComponent(out _nodeTextInput);
                     }
 
                     hit.collider.TryGetComponent<INodeDrag>(out _nodeDrag);

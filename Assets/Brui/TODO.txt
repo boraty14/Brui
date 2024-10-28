@@ -1,6 +1,8 @@
 NOTES
-- Text Input implementation(for desktop) (listen click for open,
-listen press except input field for close)
+- Text Input implementation
+fix white space
+find something for capslock on mobile
+handle open close properly
 
 COMPONENTS
 - NodeCanvas => DONE
