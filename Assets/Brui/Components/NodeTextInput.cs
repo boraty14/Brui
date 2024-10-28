@@ -1,5 +1,5 @@
 #if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
-#define NATIVE_MOBILE 
+#define NATIVE_MOBILE
 #endif
 
 using Brui.Attributes;
@@ -14,7 +14,13 @@ namespace Brui.Components
     {
         [field: SerializeField] [field: ReadOnlyNode]
         public NodeText NodeText { get; private set; }
+        public int characterLimit = 12;
         private TouchScreenKeyboard _touchScreenKeyboard;
+        private string _baseText;
+        private float _blinkTimer;
+        private bool _showBlink;
+
+        private const string CursorSymbol = "|";
 
         public override void SetComponents()
         {
@@ -32,7 +38,7 @@ namespace Brui.Components
             _touchScreenKeyboard = TouchScreenKeyboard.Open(NodeText.Text, TouchScreenKeyboardType.Default,
                 false, false, false, true, "");
 #else
-            
+
 #endif
         }
 
@@ -45,6 +51,7 @@ namespace Brui.Components
 #if NATIVE_MOBILE
             if (_touchScreenKeyboard == null)
             {
+                ResetBlink();
                 return;
             }
             
@@ -57,14 +64,45 @@ namespace Brui.Components
                 _touchScreenKeyboard = null;
                 return;
             }
-            
-            if (_touchScreenKeyboard.active)
+
+            if (!_touchScreenKeyboard.active)
             {
-                NodeText.Text = _touchScreenKeyboard.text;
+                return;
+            }
+
+            if (_touchScreenKeyboard.text.Length <= characterLimit)
+            {
+                _baseText = _touchScreenKeyboard.text;
+            }
+            else
+            {
+                _touchScreenKeyboard.text = _baseText;
+            }
+            
+            if (_showBlink)
+            {
+                NodeText.Text = _baseText+ CursorSymbol;
+            }
+            else
+            {
+                NodeText.Text = _baseText;
+                    
+            }
+            _blinkTimer += Time.deltaTime;
+            if (_blinkTimer > NodeConstants.InputBlinkInterval)
+            {
+                _blinkTimer = 0f;
+                _showBlink = !_showBlink;
             }
 #else
-            
+
 #endif
+        }
+
+        private void ResetBlink()
+        {
+            _blinkTimer = 0f;
+            _showBlink = false;
         }
     }
 }

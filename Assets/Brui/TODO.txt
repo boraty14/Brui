@@ -1,5 +1,6 @@
 NOTES
-- Text Input implementation(for desktop)
+- Text Input implementation(for desktop) (listen click for open,
+listen press except input field for close)
 
 FINAL
 - Turn it into github package
@@ -11,9 +12,9 @@ COMPONENTS
 - NodeImage => DONE
 - NodeButton(NodeImage, NodeCollider) => DONE
 - NodeLayout => DONE
-- NodeScroll(NodeCollider) => WIP
+- NodeScroll(NodeCollider) => DONE
 - NodeTextInput(NodeCollider) => WIP
-- NodeText => WIP
+- NodeText => DONE
 
 INTERACTION
 - NodeCamera => DONE
