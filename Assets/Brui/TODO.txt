@@ -2,9 +2,6 @@ NOTES
 - Text Input implementation(for desktop) (listen click for open,
 listen press except input field for close)
 
-FINAL
-- Turn it into github package
-
 COMPONENTS
 - NodeCanvas => DONE
 - NodeTransform => DONE
