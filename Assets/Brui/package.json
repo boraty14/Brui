@@ -1,0 +1,11 @@
+{
+  "name": "com.braty.brui",
+  "version": "1.0.0",
+  "displayName": "Brui",
+  "description": "Simple GameObject based UI",
+  "unity": "6000.0",
+  "author": {
+    "name": "Braty",
+    "url": "https://github.com/boraty14"
+  }
+}
