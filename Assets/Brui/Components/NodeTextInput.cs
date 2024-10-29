@@ -6,6 +6,7 @@ using Brui.Attributes;
 using Brui.EventHandlers;
 using UnityEngine;
 #if !NATIVE_MOBILE
+using Brui.Utils;
 using UnityEngine.InputSystem;
 #endif
 
@@ -18,7 +19,6 @@ namespace Brui.Components
         [field: SerializeField] [field: ReadOnlyNode]
         public NodeText NodeText { get; private set; }
         public int characterLimit = 12;
-        public bool isSpaceEnabled;
         public string BaseText { get; private set; } = string.Empty;
 
         private TouchScreenKeyboard _touchScreenKeyboard;
@@ -172,12 +172,13 @@ namespace Brui.Components
                     continue;
                 }
 
-                char keyChar = keyName[0];
-                if (char.IsLetterOrDigit(keyChar) || (isSpaceEnabled && char.IsWhiteSpace(keyChar)))
+                if (!CapsLockDetector.IsCapsLockActive())
                 {
-                    BaseText += keyChar;
+                    keyName = keyName.ToLower();
                 }
 
+                char keyChar = keyName[0];
+                BaseText += keyChar;
             }
         }
 #endif
