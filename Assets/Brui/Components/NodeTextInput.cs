@@ -5,7 +5,9 @@
 using Brui.Attributes;
 using Brui.EventHandlers;
 using UnityEngine;
+#if !NATIVE_MOBILE
 using UnityEngine.InputSystem;
+#endif
 
 namespace Brui.Components
 {
@@ -22,7 +24,12 @@ namespace Brui.Components
         private TouchScreenKeyboard _touchScreenKeyboard;
         private float _blinkTimer;
         private bool _showBlink;
-        private bool _isOpen;
+
+#if NATIVE_MOBILE
+        private bool _isMobileOpen;
+#else
+        private bool _isKeyboardOpen;
+#endif
 
         private const string CursorSymbol = "|";
 
@@ -34,7 +41,9 @@ namespace Brui.Components
 
         public void CloseInput()
         {
-            _isOpen = false;
+#if !NATIVE_MOBILE
+            _isKeyboardOpen = false;
+#endif
             NodeText.Text = BaseText;
         }
 
@@ -44,12 +53,12 @@ namespace Brui.Components
 
         public void OnCompleteClick()
         {
-            _isOpen = true;
 #if NATIVE_MOBILE
             _touchScreenKeyboard = TouchScreenKeyboard.Open(NodeText.Text, TouchScreenKeyboardType.Default,
                 false, false, false, true, "");
+            _isMobileOpen = true;
 #else
-
+            _isKeyboardOpen = true;
 #endif
         }
 
@@ -60,13 +69,20 @@ namespace Brui.Components
         private void Update()
         {
 #if NATIVE_MOBILE
-            if (_touchScreenKeyboard == null)
+            if (!_isMobileOpen)
             {
-                _isOpen = false;
                 ResetBlink();
                 return;
             }
-            
+
+            if (_touchScreenKeyboard == null)
+            {
+                _isMobileOpen = false;
+                NodeText.Text = BaseText;
+                ResetBlink();
+                return;
+            }
+
             var status = _touchScreenKeyboard.status;
 
             if (status == TouchScreenKeyboard.Status.Done ||
@@ -91,7 +107,7 @@ namespace Brui.Components
                 _touchScreenKeyboard.text = BaseText;
             }
 #else
-            if (!_isOpen)
+            if (!_isKeyboardOpen)
             {
                 ResetBlink();
                 return;
