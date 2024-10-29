@@ -14,6 +14,7 @@
 using System.Runtime.InteropServices;
 #endif
 
+
 namespace Brui.Utils
 {
     public static class CapsLockDetector 
@@ -25,12 +26,6 @@ namespace Brui.Utils
     // Virtual key code for Caps Lock
     private const int VK_CAPITAL = 0x14;
 #endif
-
-#if GAME_MAC
-    [DllImport("__Internal")]
-    private static extern bool IsCapsLockOnMac();
-#endif
-
         public static bool IsCapsLockActive()
         {
             
@@ -38,7 +33,7 @@ namespace Brui.Utils
             return (((ushort)GetKeyState(VK_CAPITAL)) & 0x0001) != 0;
             
 #elif GAME_MAC
-            return IsCapsLockOnMac();
+            return false;
             
 #elif GAME_LINUX
             return false;
