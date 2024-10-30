@@ -1,8 +1,4 @@
 NOTES
-- Text Input implementation
-fix white space
-find something for capslock on mobile
-handle open close properly
 
 COMPONENTS
 - NodeCanvas => DONE
@@ -12,7 +8,7 @@ COMPONENTS
 - NodeButton(NodeImage, NodeCollider) => DONE
 - NodeLayout => DONE
 - NodeScroll(NodeCollider) => DONE
-- NodeTextInput(NodeCollider) => WIP
+- NodeTextInput(NodeCollider) => DONE
 - NodeText => DONE
 
 INTERACTION
