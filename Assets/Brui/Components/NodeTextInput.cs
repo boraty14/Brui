@@ -32,7 +32,7 @@ namespace Brui.Components
 
         private void OnSubmit(string message)
         {
-            Debug.Log($"SSSSSS {message}");
+            Debug.LogError($"SSSSSS {message}");
             OnMessage?.Invoke(message);
             UnregisterFromInputField();
         }

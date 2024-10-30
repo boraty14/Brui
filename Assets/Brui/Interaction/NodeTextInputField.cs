@@ -21,8 +21,6 @@ namespace Brui.Interaction
         public event Action<string> OnSubmit;
         public event Action OnCancel;
         public bool IsOpen { get; private set; }
-        private bool _isDeselected;
-        private string _latestMessage;
 
         private void Awake()
         {
@@ -32,35 +30,39 @@ namespace Brui.Interaction
         private void Start()
         {
             _inputField.onDeselect.AddListener(OnDeselected);
-            _inputField.onEndEdit.AddListener(OnEndEdit);
+            _inputField.onSubmit.AddListener(OnSubmitted);
             Close();
+        }
+
+        private void Update()
+        {
+            if (!IsOpen)
+            {
+                return;
+            }
+
+#if NATIVE_MOBILE
+            if (_inputField.isFocused && !TouchScreenKeyboard.visible)
+            {
+                OnSubmitMobile(_inputField.text);
+            }
+#endif
         }
         
-        private void OnEndEdit(string message)
+        private void OnSubmitted(string message)
         {
-            Debug.LogError(4444);
-            _isDeselected = false;
-            _latestMessage = message;
+            OnSubmit?.Invoke(message);
             Close();
-            StopCoroutine(nameof(TrySubmit));
-            StartCoroutine(nameof(TrySubmit));
         }
 
-        private IEnumerator TrySubmit()
+        private void OnSubmitMobile(string message)
         {
-            yield return null;
-            yield return null;
-            if (_isDeselected)
-            {
-                yield break;
-            }
-            OnSubmit?.Invoke(_latestMessage);
+            OnSubmit?.Invoke(message);
+            Close();
         }
-
 
         private void OnDeselected(string message)
         {
-            _isDeselected = true;
             OnCancel?.Invoke();
             Close();
         }
@@ -87,7 +89,8 @@ namespace Brui.Interaction
             float keyboardHeight = GetKeyboardHeight();
             Debug.Log(keyboardHeight);
             float newY = keyboardHeight + 10f;
-            _inputObjectRectTransform.anchoredPosition = new Vector2(_inputObjectRectTransform.anchoredPosition.x, newY);
+            _inputObjectRectTransform.anchoredPosition =
+                new Vector2(_inputObjectRectTransform.anchoredPosition.x, newY);
             _inputObject.SetActive(true);
         }
 
@@ -127,7 +130,7 @@ namespace Brui.Interaction
         private void OnDestroy()
         {
             _inputField.onDeselect.RemoveListener(OnDeselected);
-            _inputField.onEndEdit.RemoveListener(OnEndEdit);
+            _inputField.onSubmit.RemoveListener(OnSubmitted);
         }
     }
 }
