@@ -14,14 +14,15 @@ namespace Brui.Interaction
     {
         [SerializeField] private GameObject _inputObject;
         [SerializeField] private TMP_InputField _inputField;
-        [SerializeField] private Button _submitButton;
         [SerializeField] private CanvasScaler _canvasScaler;
-
-        private RectTransform _inputFieldRectTransform;
+        [SerializeField] private RectTransform _inputObjectRectTransform;
 
         public static NodeTextInputField I { get; private set; }
         public event Action<string> OnSubmit;
         public event Action OnCancel;
+        public bool IsOpen { get; private set; }
+        private bool _isDeselected;
+        private string _latestMessage;
 
         private void Awake()
         {
@@ -30,45 +31,47 @@ namespace Brui.Interaction
 
         private void Start()
         {
-            _inputFieldRectTransform = _inputField.GetComponent<RectTransform>();
-            _inputField.onSelect.AddListener(OnSelected);
             _inputField.onDeselect.AddListener(OnDeselected);
-            _inputField.onSubmit.AddListener(OnSubmitted);
-            _submitButton.onClick.AddListener(OnSubmitButtonClick);
+            _inputField.onEndEdit.AddListener(OnEndEdit);
             Close();
         }
-
-        private void OnSubmitButtonClick()
+        
+        private void OnEndEdit(string message)
         {
-            Debug.Log($"submit button clicked {_inputField.text}");
-            OnSubmit?.Invoke(_inputField.text);
+            Debug.LogError(4444);
+            _isDeselected = false;
+            _latestMessage = message;
             Close();
+            StopCoroutine(nameof(TrySubmit));
+            StartCoroutine(nameof(TrySubmit));
         }
 
-        private void OnSubmitted(string message)
+        private IEnumerator TrySubmit()
         {
-            Debug.Log($"submitted {message}");
-            OnSubmit?.Invoke(message);
-            Close();
+            yield return null;
+            yield return null;
+            if (_isDeselected)
+            {
+                yield break;
+            }
+            OnSubmit?.Invoke(_latestMessage);
         }
 
-        private void OnSelected(string message)
-        {
-            Debug.Log($"selected {message}");
-        }
 
         private void OnDeselected(string message)
         {
-            Debug.Log($"deselected {message}");
+            _isDeselected = true;
             OnCancel?.Invoke();
             Close();
         }
 
         public void Open()
         {
+            IsOpen = true;
             _inputObject.SetActive(true);
             _inputField.ActivateInputField();
 #if NATIVE_MOBILE
+            StopCoroutine(nameof(WaitForKeyboard));
             StartCoroutine(nameof(WaitForKeyboard));
 #endif
         }
@@ -79,11 +82,12 @@ namespace Brui.Interaction
             {
                 yield return null;
             }
-            yield return new WaitForSeconds(0.1f);
+
+            yield return new WaitForSeconds(0.5f);
             float keyboardHeight = GetKeyboardHeight();
             Debug.Log(keyboardHeight);
             float newY = keyboardHeight + 10f;
-            _inputFieldRectTransform.anchoredPosition = new Vector2(_inputFieldRectTransform.anchoredPosition.x, newY);
+            _inputObjectRectTransform.anchoredPosition = new Vector2(_inputObjectRectTransform.anchoredPosition.x, newY);
             _inputObject.SetActive(true);
         }
 
@@ -113,17 +117,17 @@ namespace Brui.Interaction
 
         private void Close()
         {
+            IsOpen = false;
             StopCoroutine(nameof(WaitForKeyboard));
+            _inputField.DeactivateInputField();
             _inputObject.SetActive(false);
             _inputField.text = string.Empty;
         }
 
         private void OnDestroy()
         {
-            _inputField.onSelect.RemoveListener(OnSelected);
             _inputField.onDeselect.RemoveListener(OnDeselected);
-            _inputField.onSubmit.RemoveListener(OnSubmitted);
-            _submitButton.onClick.RemoveListener(OnSubmitButtonClick);
+            _inputField.onEndEdit.RemoveListener(OnEndEdit);
         }
     }
 }

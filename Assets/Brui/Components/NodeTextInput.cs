@@ -8,7 +8,7 @@ namespace Brui.Components
     [RequireComponent(typeof(NodeCollider))]
     public class NodeTextInput : NodeComponent, INodePointerClick
     {
-        public event Action<string> OnMessage; 
+        public event Action<string> OnMessage;
         
         public void OnStartClick()
         {
@@ -17,6 +17,10 @@ namespace Brui.Components
 
         public void OnCompleteClick()
         {
+            if (NodeTextInputField.I.IsOpen)
+            {
+                return;
+            }
             NodeTextInputField.I.Open();
             NodeTextInputField.I.OnSubmit += OnSubmit;
             NodeTextInputField.I.OnCancel += OnCancel;
@@ -28,6 +32,7 @@ namespace Brui.Components
 
         private void OnSubmit(string message)
         {
+            Debug.Log($"SSSSSS {message}");
             OnMessage?.Invoke(message);
             UnregisterFromInputField();
         }
