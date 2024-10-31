@@ -15,6 +15,12 @@ namespace Brui.Components
         public void SetNodeSize(Vector2 nodeSize) => NodeSize = nodeSize;
         public void SetNodeOrder(int nodeOrder) => NodeOrder = nodeOrder;
 
+        public void SetWorldPosition(Vector2 position)
+        {
+            Vector2 originalPosition = (Vector2)transform.position - TransformSettings.PositionOffset;
+            TransformSettings.PositionOffset = position - originalPosition;
+        }
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
