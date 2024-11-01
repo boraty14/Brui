@@ -1,7 +1,7 @@
-<div style="text-align: center;">
+<div style="display: flex; justify-content: center;">
 
-<p style="text-align: center;">
-  <img src="Assets\Brui\Editor\Icons\layers.png" width="250">
+<p>
+  <img src="Assets\Brui\Editor\Icons\layers.png" width="150">
 </p>
 </div>
 
