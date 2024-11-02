@@ -28,7 +28,6 @@ namespace Brui.Components
             float width = cameraVerticalSize * (screenSize.x / screenSize.y) * 2f;
             float height = cameraVerticalSize * 2f;
 
-            // TODO SAFE AREA
             Vector3 offset = Vector3.zero;
             if (ApplySafeAreaX)
             {
