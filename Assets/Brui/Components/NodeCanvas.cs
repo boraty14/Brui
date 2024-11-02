@@ -17,11 +17,6 @@ namespace Brui.Components
 
         private int _order;
 
-        private void OnEnable()
-        {
-            nodeCamera = FindAnyObjectByType<NodeCamera>();
-        }
-
         private void Update()
         {
             _screenSize = new Vector2(Screen.width, Screen.height);
