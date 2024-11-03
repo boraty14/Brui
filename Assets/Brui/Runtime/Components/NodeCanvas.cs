@@ -1,7 +1,7 @@
-using Brui.Interaction;
+using Brui.Runtime.Interaction;
 using UnityEngine;
 
-namespace Brui.Components
+namespace Brui.Runtime.Components
 {
     [ExecuteAlways]
     [DefaultExecutionOrder(NodeConstants.CanvasExecutionOrder)]

@@ -1294,8 +1294,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nodeCamera: {fileID: 330585548}
-  ApplySafeAreaX: 0
-  ApplySafeAreaY: 0
+  ApplySafeAreaX: 1
+  ApplySafeAreaY: 1
 --- !u!4 &470305742
 Transform:
   m_ObjectHideFlags: 0
@@ -1305,7 +1305,7 @@ Transform:
   m_GameObject: {fileID: 470305740}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.28077757, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1613,7 +1613,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &631608435
 Transform:
   m_ObjectHideFlags: 0
@@ -1799,7 +1799,7 @@ MonoBehaviour:
     AnchorY:
       Min: 0
       Max: 1
-  <NodeSize>k__BackingField: {x: 18, y: 40}
+  <NodeSize>k__BackingField: {x: 18.488121, y: 36.50108}
   <NodeOrder>k__BackingField: 17
 --- !u!212 &680722923
 SpriteRenderer:
@@ -2720,7 +2720,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1330753739
 Transform:
   m_ObjectHideFlags: 0
@@ -2730,7 +2730,7 @@ Transform:
   m_GameObject: {fileID: 1330753738}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.68, y: 0, z: 0}
+  m_LocalPosition: {x: 9.2440605, y: 14.6004305, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2764,15 +2764,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TransformSettings:
-    SizeOffset: {x: 1, y: 1}
-    PositionOffset: {x: -6.68, y: 0}
+    SizeOffset: {x: 3, y: 3}
+    PositionOffset: {x: 0, y: 0}
     AnchorX:
-      Min: 0.5
-      Max: 0.5
+      Min: 1
+      Max: 1
     AnchorY:
-      Min: 0.5
-      Max: 0.5
-  <NodeSize>k__BackingField: {x: 1, y: 1}
+      Min: 0.9
+      Max: 0.9
+  <NodeSize>k__BackingField: {x: 3, y: 3}
   <NodeOrder>k__BackingField: 0
 --- !u!212 &1330753742
 SpriteRenderer:
@@ -2823,7 +2823,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3, y: 3}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

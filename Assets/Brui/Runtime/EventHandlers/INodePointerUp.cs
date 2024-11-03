@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Brui.EventHandlers
+namespace Brui.Runtime.EventHandlers
 {
     public interface INodePointerUp
     {

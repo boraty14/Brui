@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Brui.Interaction
+namespace Brui.Runtime.Interaction
 {
     public interface INodeInputFetcher
     {

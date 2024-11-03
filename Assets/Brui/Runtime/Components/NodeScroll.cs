@@ -1,9 +1,9 @@
 using System;
-using Brui.Attributes;
-using Brui.EventHandlers;
+using Brui.Runtime.Attributes;
+using Brui.Runtime.EventHandlers;
 using UnityEngine;
 
-namespace Brui.Components
+namespace Brui.Runtime.Components
 {
     [RequireComponent(typeof(NodeCollider))]
     [RequireComponent(typeof(NodeImage))]

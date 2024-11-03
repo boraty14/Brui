@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using Brui.Components;
-using Brui.EventHandlers;
+using Brui.Runtime.EventHandlers;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 
-namespace Brui.Interaction
+namespace Brui.Runtime.Interaction
 {
     [RequireComponent(typeof(Camera))]
     public class NodeCamera : MonoBehaviour

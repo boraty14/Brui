@@ -1,4 +1,4 @@
-namespace Brui.Components
+namespace Brui.Runtime.Components
 {
     public class NodeLayout : NodeComponent
     {

@@ -1,7 +1,7 @@
-using Brui.Attributes;
+using Brui.Runtime.Attributes;
 using UnityEngine;
 
-namespace Brui.Components
+namespace Brui.Runtime.Components
 {
     [RequireComponent(typeof(NodeTransform))]
     public abstract class NodeComponent : MonoBehaviour

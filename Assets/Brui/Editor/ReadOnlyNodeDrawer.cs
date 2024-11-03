@@ -1,4 +1,4 @@
-using Brui.Attributes;
+using Brui.Runtime.Attributes;
 using UnityEditor;
 using UnityEngine;
 

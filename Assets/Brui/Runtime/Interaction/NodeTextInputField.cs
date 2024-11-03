@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Brui.Interaction
+namespace Brui.Runtime.Interaction
 {
     public class NodeTextInputField : MonoBehaviour
     {

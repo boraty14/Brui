@@ -1,4 +1,4 @@
-namespace Brui.EventHandlers
+namespace Brui.Runtime.EventHandlers
 {
     public interface INodePointerClick
     {

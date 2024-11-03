@@ -1,8 +1,8 @@
-using Brui.Attributes;
+using Brui.Runtime.Attributes;
 using TMPro;
 using UnityEngine;
 
-namespace Brui.Components
+namespace Brui.Runtime.Components
 {
     [RequireComponent(typeof(TextMeshPro))]
     [ExecuteAlways]

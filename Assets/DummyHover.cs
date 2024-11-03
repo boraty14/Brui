@@ -1,4 +1,4 @@
-using Brui.EventHandlers;
+using Brui.Runtime.EventHandlers;
 using UnityEngine;
 
 namespace DefaultNamespace

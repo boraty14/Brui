@@ -2,7 +2,7 @@ using UnityEngine;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
-namespace Brui.Interaction
+namespace Brui.Runtime.Interaction
 {
     public class MobileInputFetcher : INodeInputFetcher
     {

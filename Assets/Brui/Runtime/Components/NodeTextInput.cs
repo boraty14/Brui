@@ -1,9 +1,9 @@
 using System;
-using Brui.EventHandlers;
-using Brui.Interaction;
+using Brui.Runtime.EventHandlers;
+using Brui.Runtime.Interaction;
 using UnityEngine;
 
-namespace Brui.Components
+namespace Brui.Runtime.Components
 {
     [RequireComponent(typeof(NodeCollider))]
     public class NodeTextInput : NodeComponent, INodePointerClick

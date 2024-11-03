@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Brui.Interaction
+namespace Brui.Runtime.Interaction
 {
     public class DesktopInputFetcher : INodeInputFetcher
     {

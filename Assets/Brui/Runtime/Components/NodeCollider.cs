@@ -1,8 +1,8 @@
 using System;
-using Brui.Attributes;
+using Brui.Runtime.Attributes;
 using UnityEngine;
 
-namespace Brui.Components
+namespace Brui.Runtime.Components
 {
     [ExecuteAlways]
     public class NodeCollider : NodeComponent
