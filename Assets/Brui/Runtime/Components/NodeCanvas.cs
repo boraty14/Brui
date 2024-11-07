@@ -138,7 +138,15 @@ namespace Brui.Runtime.Components
 
             SetNodeTransform(nodeLayout.NodeTransform, parentSize);
 
-            int childCount = nodeLayout.transform.childCount;
+            int childCount = 0;
+            for (int i = 0; i < nodeLayout.transform.childCount; i++)
+            {
+                var child = nodeLayout.transform.GetChild(i);
+                if (child.gameObject.activeSelf)
+                {
+                    childCount++;
+                }
+            }
             if (childCount == 0)
             {
                 return;
@@ -153,9 +161,15 @@ namespace Brui.Runtime.Components
                 ? new Vector2(0f, -nodeLayout.NodeTransform.NodeSize.y * 0.5f)
                 : new Vector2(-nodeLayout.NodeTransform.NodeSize.x * 0.5f, 0f);
 
+            int childIndex = 0;
             for (int i = 0; i < childCount; i++)
             {
                 var child = nodeLayout.transform.GetChild(i);
+                if (!child.gameObject.activeSelf)
+                {
+                    continue;
+                }
+                
                 var childNode = child.GetComponent<NodeTransform>();
                 if (isVertical)
                 {
@@ -180,11 +194,11 @@ namespace Brui.Runtime.Components
 
                 Vector2 offset = isVertical
                     ? isReverse
-                        ? new Vector2(0f, (childCount - i) * interval)
-                        : new Vector2(0f, (i + 1) * interval)
+                        ? new Vector2(0f, (childCount - childIndex) * interval)
+                        : new Vector2(0f, (childIndex + 1) * interval)
                     : isReverse
-                        ? new Vector2((childCount - i) * interval, 0f)
-                        : new Vector2((i + 1) * interval, 0f);
+                        ? new Vector2((childCount - childIndex) * interval, 0f)
+                        : new Vector2((childIndex + 1) * interval, 0f);
 
                 var combinedPosition = startPosition + offset;
                 childNode.TransformSettings.PositionOffset = combinedPosition;
@@ -195,6 +209,7 @@ namespace Brui.Runtime.Components
                 child.position = new Vector3(currentPosition.x, currentPosition.y, nodeOffset);
                 
                 ResolveChildNodes(child, childNode.NodeSize);
+                childIndex++;
             }
         }
 
