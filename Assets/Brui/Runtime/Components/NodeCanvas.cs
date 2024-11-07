@@ -15,6 +15,10 @@ namespace Brui.Runtime.Components
         private Rect _safeArea;
         private Vector2 _canvasSize;
 
+        private Vector3 _latestCameraPosition;
+        private float _latestCameraVerticalSize;
+        private float _latestCameraDistance;
+
         private int _order;
 
         private void Update()
@@ -23,7 +27,25 @@ namespace Brui.Runtime.Components
             _safeArea = Screen.safeArea;
             _order = 0;
 
-            float cameraVerticalSize = nodeCamera.VerticalSize;
+            Vector3 cameraPosition;
+            float cameraVerticalSize;
+            float cameraDistance;
+            if (nodeCamera != null)
+            {
+                cameraPosition = nodeCamera.transform.position;
+                cameraVerticalSize = nodeCamera.VerticalSize;
+                cameraDistance = nodeCamera.DistanceToCamera;
+                _latestCameraPosition = cameraPosition;
+                _latestCameraVerticalSize = cameraVerticalSize;
+                _latestCameraDistance = cameraDistance;
+            }
+            else
+            {
+                cameraPosition = _latestCameraPosition;
+                cameraVerticalSize = _latestCameraVerticalSize;
+                cameraDistance = _latestCameraDistance;
+            }
+            
             Vector2 screenSize = _screenSize;
             float width = cameraVerticalSize * (screenSize.x / screenSize.y) * 2f;
             float height = cameraVerticalSize * 2f;
@@ -47,7 +69,7 @@ namespace Brui.Runtime.Components
 
             _canvasSize = new Vector2(width, height);
 
-            transform.position = nodeCamera.transform.position + Vector3.forward * nodeCamera.DistanceToCamera + offset;
+            transform.position = cameraPosition + Vector3.forward * cameraDistance + offset;
             ResolveChildNodes(transform, _canvasSize);
         }
 
