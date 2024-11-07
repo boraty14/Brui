@@ -49,7 +49,7 @@ namespace Brui.Runtime.Components
     [Serializable]
     public class NodeButtonSettings
     {
-        [Range(0f, 1f)] public float ClickStartScale = 0.8f;
+        [Range(0f, 1f)] public float ClickStartScale = 0.9f;
         public Color ClickStartColor = Color.grey;
     }
 }
