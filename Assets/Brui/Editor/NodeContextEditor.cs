@@ -24,6 +24,7 @@ namespace Brui.Editor
                 Selection.activeGameObject = newChild;
 
                 newChild.AddComponent<NodeTransform>();
+                SetLayer(newChild, LayerMask.NameToLayer("Node"));
             }
         }
         
@@ -45,6 +46,7 @@ namespace Brui.Editor
                 Selection.activeGameObject = newChild;
 
                 newChild.AddComponent<NodeImage>();
+                SetLayer(newChild, LayerMask.NameToLayer("Node"));
             }
         }
         
@@ -66,6 +68,7 @@ namespace Brui.Editor
                 Selection.activeGameObject = newChild;
 
                 newChild.AddComponent<NodeButton>();
+                SetLayer(newChild, LayerMask.NameToLayer("Node"));
             }
         }
         
@@ -87,6 +90,7 @@ namespace Brui.Editor
                 Selection.activeGameObject = newChild;
 
                 newChild.AddComponent<NodeScroll>();
+                SetLayer(newChild, LayerMask.NameToLayer("Node"));
             }
         }
         
@@ -108,6 +112,7 @@ namespace Brui.Editor
                 Selection.activeGameObject = newChild;
 
                 newChild.AddComponent<NodeLayout>();
+                SetLayer(newChild, LayerMask.NameToLayer("Node"));
             }
         }
         
@@ -129,6 +134,7 @@ namespace Brui.Editor
                 Selection.activeGameObject = newChild;
 
                 newChild.AddComponent<NodeText>();
+                SetLayer(newChild, LayerMask.NameToLayer("Node"));
             }
         }
         
@@ -150,6 +156,17 @@ namespace Brui.Editor
                 Selection.activeGameObject = newChild;
 
                 newChild.AddComponent<NodeTextInput>();
+                SetLayer(newChild, LayerMask.NameToLayer("Node"));
+            }
+        }
+        
+        static void SetLayer(GameObject obj, int layer)
+        {
+            obj.layer = layer;
+
+            foreach (Transform child in obj.transform)
+            {
+                SetLayer(child.gameObject, layer);
             }
         }
     }
