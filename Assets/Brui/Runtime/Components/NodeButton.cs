@@ -23,18 +23,30 @@ namespace Brui.Runtime.Components
 
         public void OnStartClick()
         {
+            if (!ButtonSettings.IsClickable)
+            {
+                return;
+            }
             transform.localScale = Vector3.one * ButtonSettings.ClickStartScale;
             NodeImage.Image.color = ButtonSettings.ClickStartColor;
         }
 
         public void OnCompleteClick()
         {
+            if (!ButtonSettings.IsClickable)
+            {
+                return;
+            }
             ResetState();
             OnButtonClick?.Invoke();
         }
 
         public void OnCancelClick()
         {
+            if (!ButtonSettings.IsClickable)
+            {
+                return;
+            }
             ResetState();
             OnButtonClick?.Invoke();
         }
@@ -49,6 +61,7 @@ namespace Brui.Runtime.Components
     [Serializable]
     public class NodeButtonSettings
     {
+        public bool IsClickable = true;
         [Range(0f, 1f)] public float ClickStartScale = 0.9f;
         public Color ClickStartColor = Color.grey;
     }
