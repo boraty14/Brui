@@ -129,10 +129,16 @@ namespace Brui.Runtime.Components
             {
                 var child = nodeLayout.transform.GetChild(i);
                 var childNode = child.GetComponent<NodeTransform>();
-                childNode.TransformSettings.AnchorX.Min = isVertical ? 0.5f : 0f;
-                childNode.TransformSettings.AnchorX.Max = isVertical ? 0.5f : 0f;
-                childNode.TransformSettings.AnchorY.Min = isVertical ? 0f : 0.5f;
-                childNode.TransformSettings.AnchorY.Max = isVertical ? 0f : 0.5f;
+                if (isVertical)
+                {
+                    childNode.TransformSettings.AnchorY.Min = 0f;
+                    childNode.TransformSettings.AnchorY.Max = 0f;
+                }
+                else
+                {
+                    childNode.TransformSettings.AnchorX.Min = 0f;
+                    childNode.TransformSettings.AnchorX.Max = 0f;
+                }
                 childNode.SetNodeSize(childNode.TransformSettings.SizeOffset);
                 childNode.SetNodeOrder(_order);
                 _order++;
