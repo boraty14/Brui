@@ -30,6 +30,12 @@ namespace Brui.Runtime.Components
             Vector3 cameraPosition;
             float cameraVerticalSize;
             float cameraDistance;
+
+            if (nodeCamera == null)
+            {
+                nodeCamera = FindAnyObjectByType<NodeCamera>();
+            }
+            
             if (nodeCamera != null)
             {
                 cameraPosition = nodeCamera.transform.position;
