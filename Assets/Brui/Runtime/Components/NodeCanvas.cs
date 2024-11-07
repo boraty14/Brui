@@ -139,7 +139,14 @@ namespace Brui.Runtime.Components
                     childNode.TransformSettings.AnchorX.Min = 0f;
                     childNode.TransformSettings.AnchorX.Max = 0f;
                 }
-                childNode.SetNodeSize(childNode.TransformSettings.SizeOffset);
+                
+                float anchorXMin = (childNode.TransformSettings.AnchorX.Min - 0.5f) * parentSize.x;
+                float anchorXMax = (childNode.TransformSettings.AnchorX.Max - 0.5f) * parentSize.x;
+                float anchorYMin = (childNode.TransformSettings.AnchorY.Min - 0.5f) * parentSize.y;
+                float anchorYMax = (childNode.TransformSettings.AnchorY.Max - 0.5f) * parentSize.y;
+                
+                childNode.SetNodeSize(new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
+                                      childNode.TransformSettings.SizeOffset);
                 childNode.SetNodeOrder(_order);
                 _order++;
 
