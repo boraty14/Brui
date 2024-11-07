@@ -146,6 +146,7 @@ namespace Brui.Runtime.Components
                         : new Vector2((i + 1) * interval, 0f);
 
                 var combinedPosition = startPosition + offset;
+                childNode.TransformSettings.PositionOffset = combinedPosition;
                 child.localPosition = combinedPosition;
 
                 var currentPosition = child.position;
