@@ -10,11 +10,8 @@ namespace Brui.Runtime.Components
         public bool preserveAspect;
         [field: SerializeField] [field: ReadOnlyNode]
         public SpriteRenderer Image { get; private set; }
-        [field: SerializeField] [field: ReadOnlyNode]
-        public float ScaleFactor { get; private set; }
 
         private Vector2 _latestNodeSize;
-        private Vector2 _latestImageSize;
         private bool _latestPreserveAspectState;
 
         public override void SetComponents()
@@ -25,25 +22,17 @@ namespace Brui.Runtime.Components
             {
                 Image.sprite = Resources.Load<Sprite>("4x4");
             }
-            ScaleFactor = 1f;
-        }
-
-        public void SetScaleFactor(float scaleFactor)
-        {
-            ScaleFactor = scaleFactor;
         }
 
         private void Update()
         {
             if (_latestNodeSize == NodeTransform.NodeSize &&
-                _latestImageSize == Image.size &&
+                _latestNodeSize == Image.size &&
                 _latestPreserveAspectState == preserveAspect &&
                 Image.drawMode == SpriteDrawMode.Sliced)
             {
                 return;
             }
-
-            Vector2 imageSize = Image.size;
             
             Image.drawMode = SpriteDrawMode.Sliced;
             if (preserveAspect)
@@ -59,26 +48,23 @@ namespace Brui.Runtime.Components
                 
                 if (spriteAspectRatio > nodeAspectRatio)
                 {
-                    imageSize = new Vector2(nodeSize.x, nodeSize.y * (nodeAspectRatio / spriteAspectRatio));
+                    Image.size = new Vector2(nodeSize.x, nodeSize.y * (nodeAspectRatio / spriteAspectRatio));
                 }
                 else if(nodeAspectRatio > spriteAspectRatio)
                 {
-                    imageSize = new Vector2(nodeSize.x * (spriteAspectRatio / nodeAspectRatio), nodeSize.y);
+                    Image.size = new Vector2(nodeSize.x * (spriteAspectRatio / nodeAspectRatio), nodeSize.y);
                 }
                 else
                 {
-                    imageSize = nodeSize;
+                    Image.size = nodeSize;
                 }
             }
             else
             {
-                imageSize = NodeTransform.NodeSize;
+                Image.size = NodeTransform.NodeSize;
             }
-
-            Image.size = imageSize * ScaleFactor;
             
             _latestNodeSize = NodeTransform.NodeSize;
-            _latestImageSize = Image.size;
             _latestPreserveAspectState = preserveAspect;
         }
     }

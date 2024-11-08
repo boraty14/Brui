@@ -27,7 +27,7 @@ namespace Brui.Runtime.Components
             {
                 return;
             }
-            NodeImage.SetScaleFactor(ButtonSettings.ClickStartScale);
+            transform.localScale = Vector3.one * ButtonSettings.ClickStartScale;
             NodeImage.Image.color = ButtonSettings.ClickStartColor;
         }
 
@@ -52,7 +52,7 @@ namespace Brui.Runtime.Components
 
         private void ResetState()
         {
-            NodeImage.SetScaleFactor(1f);
+            transform.localScale = Vector3.one;
             NodeImage.Image.color = Color.white;
         }
     }
