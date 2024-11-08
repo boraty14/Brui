@@ -48,7 +48,6 @@ namespace Brui.Runtime.Components
                 return;
             }
             ResetState();
-            OnButtonClick?.Invoke();
         }
 
         private void ResetState()
