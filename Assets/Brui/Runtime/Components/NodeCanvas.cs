@@ -15,10 +15,6 @@ namespace Brui.Runtime.Components
         private Rect _safeArea;
         private Vector2 _canvasSize;
 
-        private Vector3 _latestCameraPosition;
-        private float _latestCameraVerticalSize;
-        private float _latestCameraDistance;
-
         private int _order;
 
         private void Update()
@@ -27,31 +23,10 @@ namespace Brui.Runtime.Components
             _safeArea = Screen.safeArea;
             _order = 0;
 
-            Vector3 cameraPosition;
-            float cameraVerticalSize;
-            float cameraDistance;
+            var cameraPosition = nodeCamera.transform.position;
+            var cameraVerticalSize = nodeCamera.VerticalSize;
+            var cameraDistance = nodeCamera.DistanceToCamera;
 
-            if (nodeCamera == null)
-            {
-                nodeCamera = FindAnyObjectByType<NodeCamera>();
-            }
-            
-            if (nodeCamera != null)
-            {
-                cameraPosition = nodeCamera.transform.position;
-                cameraVerticalSize = nodeCamera.VerticalSize;
-                cameraDistance = nodeCamera.DistanceToCamera;
-                _latestCameraPosition = cameraPosition;
-                _latestCameraVerticalSize = cameraVerticalSize;
-                _latestCameraDistance = cameraDistance;
-            }
-            else
-            {
-                cameraPosition = _latestCameraPosition;
-                cameraVerticalSize = _latestCameraVerticalSize;
-                cameraDistance = _latestCameraDistance;
-            }
-            
             Vector2 screenSize = _screenSize;
             float width = cameraVerticalSize * (screenSize.x / screenSize.y) * 2f;
             float height = cameraVerticalSize * 2f;
@@ -97,6 +72,7 @@ namespace Brui.Runtime.Components
                 {
                     childNode = child.gameObject.AddComponent<NodeTransform>();
                 }
+
                 ResolveNode(childNode, parentSize);
             }
         }
@@ -147,6 +123,7 @@ namespace Brui.Runtime.Components
                     childCount++;
                 }
             }
+
             if (childCount == 0)
             {
                 return;
@@ -169,7 +146,7 @@ namespace Brui.Runtime.Components
                 {
                     continue;
                 }
-                
+
                 var childNode = child.GetComponent<NodeTransform>();
                 if (isVertical)
                 {
@@ -181,12 +158,12 @@ namespace Brui.Runtime.Components
                     childNode.TransformSettings.AnchorX.Min = 0f;
                     childNode.TransformSettings.AnchorX.Max = 0f;
                 }
-                
+
                 float anchorXMin = (childNode.TransformSettings.AnchorX.Min - 0.5f) * parentSize.x;
                 float anchorXMax = (childNode.TransformSettings.AnchorX.Max - 0.5f) * parentSize.x;
                 float anchorYMin = (childNode.TransformSettings.AnchorY.Min - 0.5f) * parentSize.y;
                 float anchorYMax = (childNode.TransformSettings.AnchorY.Max - 0.5f) * parentSize.y;
-                
+
                 childNode.SetNodeSize(new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
                                       childNode.TransformSettings.SizeOffset);
                 childNode.SetNodeOrder(_order);
@@ -207,7 +184,7 @@ namespace Brui.Runtime.Components
                 var currentPosition = child.position;
                 var nodeOffset = childNode.NodeOrder * NodeConstants.NodeSortOffset;
                 child.position = new Vector3(currentPosition.x, currentPosition.y, nodeOffset);
-                
+
                 ResolveChildNodes(child, childNode.NodeSize);
                 childIndex++;
             }
@@ -229,7 +206,7 @@ namespace Brui.Runtime.Components
                                nodeTransform.TransformSettings.PositionOffset;
 
             nodeTransform.transform.localPosition = location;
-            
+
             var currentPosition = nodeTransform.transform.position;
             var nodeOffset = nodeTransform.NodeOrder * NodeConstants.NodeSortOffset;
             nodeTransform.transform.position = new Vector3(currentPosition.x, currentPosition.y, nodeOffset);
