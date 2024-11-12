@@ -1,59 +1,48 @@
 using System;
-using Brui.Runtime.Attributes;
 using Brui.Runtime.EventHandlers;
 using UnityEngine;
 
 namespace Brui.Runtime.Components
 {
-    [RequireComponent(typeof(NodeImage))]
-    [RequireComponent(typeof(NodeCollider))]
-    public class NodeButton : NodeComponent, INodePointerClick
+    public class NodeButton : MonoBehaviour, INodePointerClick
     {
-        [field: SerializeField] [field: ReadOnlyNode]
-        public NodeImage NodeImage { get; private set; }
-
-        public NodeButtonSettings ButtonSettings;
-        public event Action OnButtonClick;
-
-        public override void SetComponents()
-        {
-            base.SetComponents();
-            NodeImage = GetComponent<NodeImage>();
-        }
+        public bool IsClickable = true;
+        [Range(0f, 1f)] public float ClickStartScale = 0.9f;
+        public event Action OnButtonClickComplete;
+        public event Action OnButtonClickCancel;
 
         public void OnStartClick()
         {
-            if (!ButtonSettings.IsClickable)
+            if (!IsClickable)
             {
                 return;
             }
-            transform.localScale = Vector3.one * ButtonSettings.ClickStartScale;
-            NodeImage.Image.color = ButtonSettings.ClickStartColor;
+            transform.localScale = Vector3.one * ClickStartScale;
         }
 
         public void OnCompleteClick()
         {
-            if (!ButtonSettings.IsClickable)
+            if (!IsClickable)
             {
                 return;
             }
             ResetState();
-            OnButtonClick?.Invoke();
+            OnButtonClickComplete?.Invoke();
         }
 
         public void OnCancelClick()
         {
-            if (!ButtonSettings.IsClickable)
+            if (!IsClickable)
             {
                 return;
             }
             ResetState();
+            OnButtonClickCancel?.Invoke();
         }
 
         private void ResetState()
         {
             transform.localScale = Vector3.one;
-            NodeImage.Image.color = Color.white;
         }
     }
 
@@ -62,6 +51,5 @@ namespace Brui.Runtime.Components
     {
         public bool IsClickable = true;
         [Range(0f, 1f)] public float ClickStartScale = 0.9f;
-        public Color ClickStartColor = Color.grey;
     }
 }

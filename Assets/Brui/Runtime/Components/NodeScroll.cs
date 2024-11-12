@@ -5,26 +5,15 @@ using UnityEngine;
 
 namespace Brui.Runtime.Components
 {
-    [RequireComponent(typeof(NodeCollider))]
-    [RequireComponent(typeof(NodeImage))]
-    [RequireComponent(typeof(SpriteMask))]
     [DefaultExecutionOrder(NodeConstants.ScrollExecutionOrder)]
-    public class NodeScroll : NodeComponent, INodeDrag
+    public class NodeScroll : MonoBehaviour, INodeDrag
     {
         public NodeScrollSettings ScrollSettings = new();
-        [field: SerializeField] [field: ReadOnlyNode]
-        public NodeImage NodeImage { get; private set; }
-        [field: SerializeField] [field: ReadOnlyNode]
-        public SpriteMask SpriteMask { get; private set; }
         [ReadOnlyNode] [SerializeField] private NodeScrollView _scrollView;
         [ReadOnlyNode] [SerializeField] private NodeScroll _parentScroll;
 
-        public override void SetComponents()
+        private void Awake()
         {
-            base.SetComponents();
-            NodeImage = GetComponent<NodeImage>();
-            SpriteMask = GetComponent<SpriteMask>();
-            SpriteMask.maskSource = SpriteMask.MaskSource.SupportedRenderers;
             if (_scrollView == null)
             {
                 if (transform.childCount == 0)

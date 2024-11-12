@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace Brui.Runtime.Components
 {
-    [RequireComponent(typeof(NodeCollider))]
-    public class NodeTextInput : NodeComponent, INodePointerClick
+    public class NodeTextInput : MonoBehaviour, INodePointerClick
     {
         public event Action<string> OnMessage;
         
@@ -32,7 +31,6 @@ namespace Brui.Runtime.Components
 
         private void OnSubmit(string message)
         {
-            Debug.LogError($"SSSSSS {message}");
             OnMessage?.Invoke(message);
             UnregisterFromInputField();
         }

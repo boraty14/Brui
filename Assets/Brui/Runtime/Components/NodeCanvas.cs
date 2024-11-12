@@ -15,13 +15,10 @@ namespace Brui.Runtime.Components
         private Rect _safeArea;
         private Vector2 _canvasSize;
 
-        private int _order;
-
         private void Update()
         {
             _screenSize = new Vector2(Screen.width, Screen.height);
             _safeArea = Screen.safeArea;
-            _order = 0;
 
             var cameraPosition = nodeCamera.transform.position;
             var cameraVerticalSize = nodeCamera.VerticalSize;
@@ -51,169 +48,33 @@ namespace Brui.Runtime.Components
             _canvasSize = new Vector2(width, height);
 
             transform.position = cameraPosition + Vector3.forward * cameraDistance + offset;
-            ResolveChildNodes(transform, _canvasSize);
-        }
 
-        private void ResolveChildNodes(Transform nodeParent, Vector2 parentSize)
-        {
-            int childCount = nodeParent.childCount;
+            // resolve child nodes
+
+            int childCount = transform.childCount;
             for (int i = 0; i < childCount; i++)
             {
-                var child = nodeParent.GetChild(i);
-                if (child.TryGetComponent<NodeLayout>(out var nodeLayout))
-                {
-                    ResolveLayout(nodeLayout, parentSize);
-                    continue;
-                }
-
-
-                var childNode = child.GetComponent<NodeTransform>();
+                var child = transform.GetChild(i);
+                var childNode = child.GetComponent<NodeAnchor>();
                 if (childNode == null)
                 {
-                    childNode = child.gameObject.AddComponent<NodeTransform>();
+                    childNode = child.gameObject.AddComponent<NodeAnchor>();
                 }
 
-                ResolveNode(childNode, parentSize);
+                SetNodeAnchor(childNode, new Vector2(width, height));
             }
         }
 
-        private void ResolveNode(NodeTransform nodeTransform, Vector2 parentSize)
+        private void SetNodeAnchor(NodeAnchor nodeAnchor, Vector2 parentSize)
         {
-            SetNodeTransform(nodeTransform, parentSize);
-            ResolveChildNodes(nodeTransform.transform, nodeTransform.NodeSize);
-        }
+            float anchorXMin = (nodeAnchor.XAnchors.x - 0.5f) * parentSize.x;
+            float anchorXMax = (nodeAnchor.XAnchors.y - 0.5f) * parentSize.x;
+            float anchorYMin = (nodeAnchor.YAnchors.x - 0.5f) * parentSize.y;
+            float anchorYMax = (nodeAnchor.YAnchors.y - 0.5f) * parentSize.y;
 
-        private void ResolveLayout(NodeLayout nodeLayout, Vector2 parentSize)
-        {
-            bool isVertical = nodeLayout.layoutType == ENodeLayout.Vertical;
-
-            if (nodeLayout.TryGetComponent<NodeScrollView>(out var nodeScrollView))
-            {
-                int scrollViewChildCount = nodeScrollView.transform.childCount;
-                float scrollSize = scrollViewChildCount * nodeScrollView.NodeScroll.ScrollSettings.ItemSize;
-                nodeScrollView.ScrollSize = scrollSize;
-                if (isVertical)
-                {
-                    nodeScrollView.NodeTransform.TransformSettings.AnchorX.Min = 0f;
-                    nodeScrollView.NodeTransform.TransformSettings.AnchorX.Max = 1f;
-                    nodeScrollView.NodeTransform.TransformSettings.AnchorY.Min = 0.5f;
-                    nodeScrollView.NodeTransform.TransformSettings.AnchorY.Max = 0.5f;
-                    nodeScrollView.NodeTransform.TransformSettings.SizeOffset =
-                        new Vector2(0f, scrollSize);
-                }
-                else
-                {
-                    nodeScrollView.NodeTransform.TransformSettings.AnchorX.Min = 0.5f;
-                    nodeScrollView.NodeTransform.TransformSettings.AnchorX.Max = 0.5f;
-                    nodeScrollView.NodeTransform.TransformSettings.AnchorY.Min = 0f;
-                    nodeScrollView.NodeTransform.TransformSettings.AnchorY.Max = 1f;
-                    nodeScrollView.NodeTransform.TransformSettings.SizeOffset =
-                        new Vector2(scrollSize, 0f);
-                }
-            }
-
-            SetNodeTransform(nodeLayout.NodeTransform, parentSize);
-
-            int childCount = 0;
-            for (int i = 0; i < nodeLayout.transform.childCount; i++)
-            {
-                var child = nodeLayout.transform.GetChild(i);
-                if (child.gameObject.activeSelf)
-                {
-                    childCount++;
-                }
-            }
-
-            if (childCount == 0)
-            {
-                return;
-            }
-
-            float interval = isVertical
-                ? nodeLayout.NodeTransform.NodeSize.y / (childCount + 1)
-                : nodeLayout.NodeTransform.NodeSize.x / (childCount + 1);
-            bool isReverse = nodeLayout.isReverse;
-
-            Vector2 startPosition = isVertical
-                ? new Vector2(0f, -nodeLayout.NodeTransform.NodeSize.y * 0.5f)
-                : new Vector2(-nodeLayout.NodeTransform.NodeSize.x * 0.5f, 0f);
-
-            int childIndex = 0;
-            for (int i = 0; i < childCount; i++)
-            {
-                var child = nodeLayout.transform.GetChild(i);
-                if (!child.gameObject.activeSelf)
-                {
-                    continue;
-                }
-
-                var childNode = child.GetComponent<NodeTransform>();
-                if (isVertical)
-                {
-                    childNode.TransformSettings.AnchorY.Min = 0f;
-                    childNode.TransformSettings.AnchorY.Max = 0f;
-                }
-                else
-                {
-                    childNode.TransformSettings.AnchorX.Min = 0f;
-                    childNode.TransformSettings.AnchorX.Max = 0f;
-                }
-
-                float anchorXMin = (childNode.TransformSettings.AnchorX.Min - 0.5f) * parentSize.x;
-                float anchorXMax = (childNode.TransformSettings.AnchorX.Max - 0.5f) * parentSize.x;
-                float anchorYMin = (childNode.TransformSettings.AnchorY.Min - 0.5f) * parentSize.y;
-                float anchorYMax = (childNode.TransformSettings.AnchorY.Max - 0.5f) * parentSize.y;
-
-                childNode.SetNodeSize(new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
-                                      childNode.TransformSettings.SizeOffset);
-                childNode.SetNodeOrder(_order);
-                _order++;
-
-                Vector2 offset = isVertical
-                    ? isReverse
-                        ? new Vector2(0f, (childCount - childIndex) * interval)
-                        : new Vector2(0f, (childIndex + 1) * interval)
-                    : isReverse
-                        ? new Vector2((childCount - childIndex) * interval, 0f)
-                        : new Vector2((childIndex + 1) * interval, 0f);
-
-                var combinedPosition = startPosition + offset;
-                childNode.TransformSettings.PositionOffset = combinedPosition;
-                child.localPosition = combinedPosition;
-
-                var currentPosition = child.position;
-                var nodeOffset = childNode.NodeOrder * NodeConstants.NodeSortOffset;
-                child.position = new Vector3(currentPosition.x, currentPosition.y, nodeOffset);
-
-                ResolveChildNodes(child, childNode.NodeSize);
-                childIndex++;
-            }
-        }
-
-
-        private void SetNodeTransform(NodeTransform nodeTransform, Vector2 parentSize)
-        {
-            nodeTransform.SetNodeOrder(_order);
-            _order++;
-
-            float anchorXMin = (nodeTransform.TransformSettings.AnchorX.Min - 0.5f) * parentSize.x;
-            float anchorXMax = (nodeTransform.TransformSettings.AnchorX.Max - 0.5f) * parentSize.x;
-            float anchorYMin = (nodeTransform.TransformSettings.AnchorY.Min - 0.5f) * parentSize.y;
-            float anchorYMax = (nodeTransform.TransformSettings.AnchorY.Max - 0.5f) * parentSize.y;
-
-            // position
-            Vector2 location = new Vector2((anchorXMin + anchorXMax) * 0.5f, (anchorYMin + anchorYMax) * 0.5f) +
-                               nodeTransform.TransformSettings.PositionOffset;
-
-            nodeTransform.transform.localPosition = location;
-
-            var currentPosition = nodeTransform.transform.position;
-            var nodeOffset = nodeTransform.NodeOrder * NodeConstants.NodeSortOffset;
-            nodeTransform.transform.position = new Vector3(currentPosition.x, currentPosition.y, nodeOffset);
-
-            // size
-            nodeTransform.SetNodeSize(new Vector2(anchorXMax - anchorXMin, anchorYMax - anchorYMin) +
-                                      nodeTransform.TransformSettings.SizeOffset);
+            nodeAnchor.transform.localPosition =
+                new Vector2((anchorXMin + anchorXMax) * 0.5f, (anchorYMin + anchorYMax) * 0.5f) +
+                nodeAnchor.PositionOffset;
         }
 
         private void OnDrawGizmosSelected()

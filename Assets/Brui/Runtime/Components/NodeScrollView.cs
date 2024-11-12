@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Brui.Runtime.Components
 {
     [RequireComponent(typeof(NodeLayout))]
-    public class NodeScrollView : NodeComponent
+    public class NodeScrollView : MonoBehaviour
     {
         [ReadOnlyNode] public float ScrollSize;
         [field:Range(0f, 1f)] [field: SerializeField]
@@ -16,9 +16,8 @@ namespace Brui.Runtime.Components
         public NodeScroll NodeScroll { get; private set; }
         public int ElementCount => transform.childCount;
 
-        public override void SetComponents()
+        private void Awake()
         {
-            base.SetComponents();
             NodeLayout = GetComponent<NodeLayout>();
             NodeScroll = GetComponentInParent<NodeScroll>(true);
         }
