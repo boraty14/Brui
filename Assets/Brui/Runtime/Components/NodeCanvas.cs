@@ -16,7 +16,7 @@ namespace Brui.Runtime.Components
         private Vector2 _canvasSize;
         private Vector3 _offset = Vector3.zero;
 
-        public Vector3 Offset => _offset;
+        private const float NodeOrderOffset = -0.0001f;
 
         public Vector2 GetAnchorPoint(Vector2 anchor)
         {
@@ -27,6 +27,7 @@ namespace Brui.Runtime.Components
 
         private void Update()
         {
+            _order = 0;
             _screenSize = new Vector2(Screen.width, Screen.height);
             _safeArea = Screen.safeArea;
 
@@ -61,17 +62,23 @@ namespace Brui.Runtime.Components
 
             // resolve child nodes
 
-            int childCount = transform.childCount;
+            ResolveChildren(transform);
+        }
+
+        private void ResolveChildren(Transform childTransform)
+        {
+            int childCount = childTransform.childCount;
             for (int i = 0; i < childCount; i++)
             {
-                var child = transform.GetChild(i);
-                var childNode = child.GetComponent<NodeAnchor>();
-                if (childNode == null)
+                var child = childTransform.GetChild(i);
+                var childAnchor = child.GetComponent<NodeAnchor>();
+                if (childAnchor != null)
                 {
-                    return;
+                    SetNodeAnchor(childAnchor, _canvasSize);
                 }
-
-                SetNodeAnchor(childNode, _canvasSize);
+                
+                SetChildOffset(child);
+                ResolveChildren(child);
             }
         }
 
@@ -81,8 +88,23 @@ namespace Brui.Runtime.Components
             float anchorY = (nodeAnchor.Anchor.y - 0.5f) * parentSize.y;
 
             nodeAnchor.transform.localPosition =
-                new Vector2(anchorX, anchorY) +
-                nodeAnchor.PositionOffset;
+                new Vector3(
+                    anchorX + nodeAnchor.PositionOffset.x,
+                    anchorY + nodeAnchor.PositionOffset.y,
+                    nodeAnchor.transform.localPosition.z
+                );
+        }
+
+        private void SetChildOffset(Transform childTransform)
+        {
+            _order++;
+            var currentPosition = childTransform.position;
+            childTransform.position =
+                new Vector3(
+                    currentPosition.x,
+                    currentPosition.y,
+                    NodeOrderOffset * _order
+                );
         }
 
         private void OnDrawGizmosSelected()
