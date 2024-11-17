@@ -170,6 +170,20 @@ namespace Brui.Runtime.Interaction
                     }
                 }
 
+                if (IsPointerClickSet)
+                {
+                    var hitCollider = _hits[0].collider;
+                    bool isOnClick = hitCollider != null &&
+                                     hitCollider.TryGetComponent<INodePointerClick>(out var nodePointerClick) &&
+                                     nodePointerClick == _nodePointerClick;
+                    if (!isOnClick)
+                    {
+                        _nodePointerClick.OnCancelClick();
+                        _nodePointerClick = null;
+                    }
+                }
+
+
                 return;
             }
 

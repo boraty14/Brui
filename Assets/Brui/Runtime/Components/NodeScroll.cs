@@ -1,43 +1,20 @@
 using System;
-using Brui.Runtime.Attributes;
 using Brui.Runtime.EventHandlers;
 using UnityEngine;
 
 namespace Brui.Runtime.Components
 {
-    [DefaultExecutionOrder(NodeConstants.ScrollExecutionOrder)]
+    [RequireComponent(typeof(BoxCollider2D))]
     public class NodeScroll : MonoBehaviour, INodeDrag
     {
         public NodeScrollSettings ScrollSettings = new();
-        [ReadOnlyNode] [SerializeField] private NodeScrollView _scrollView;
-        [ReadOnlyNode] [SerializeField] private NodeScroll _parentScroll;
+        [SerializeField] private NodeLayout _layout;
+        [SerializeField] private NodeScroll _parentScroll;
+        [SerializeField] private BoxCollider2D _interactionCollider;
 
-        private void Awake()
+        private void OnValidate()
         {
-            if (_scrollView == null)
-            {
-                if (transform.childCount == 0)
-                {
-                    GameObject viewObject = new GameObject("View");
-                    viewObject.AddComponent<NodeScrollView>();
-                    viewObject.transform.SetParent(transform);
-                }
-
-                var firstChild = transform.GetChild(0);
-                _scrollView = firstChild.GetComponent<NodeScrollView>();
-                if (_scrollView == null)
-                {
-                    _scrollView = firstChild.gameObject.AddComponent<NodeScrollView>();
-                }
-            }
-
-            _scrollView.SetComponents();
-
-
-            if (ScrollSettings.PropagateScroll)
-            {
-                _parentScroll = GetComponentInParent<NodeScroll>(true);
-            }
+            _interactionCollider = GetComponent<BoxCollider2D>();
         }
 
         private void Start()
@@ -52,62 +29,80 @@ namespace Brui.Runtime.Components
 
         private void SetLimits()
         {
-            var scrollSize = _scrollView.ScrollSize;
-            var scrollViewNode = _scrollView.NodeTransform;
+            var scrollViewSize = _layout.ViewSize;
             var inertiaAmount = ScrollSettings.Inertia * Time.deltaTime;
+            var interactionSize = _interactionCollider.size;
+            var scrollViewLocalPosition = _layout.transform.localPosition;
 
-            switch (_scrollView.NodeLayout.layoutType)
+            switch (_layout.Layout)
             {
-                case ENodeLayout.Vertical:
-                    float verticalStartLimit = (NodeTransform.NodeSize.y - scrollSize) * 0.5f;
-                    float verticalEndLimit = (-NodeTransform.NodeSize.y + scrollSize) * 0.5f;
+                case ELayout.Vertical:
+                    float verticalStartLimit = (interactionSize.y - scrollViewSize) * 0.5f;
+                    float verticalEndLimit = (-interactionSize.y + scrollViewSize) * 0.5f;
                     float verticalPosition = 0f;
-                    float currentVerticalPosition = scrollViewNode.TransformSettings.PositionOffset.y;
+                    float currentVerticalPosition = scrollViewLocalPosition.y;
 
-                    if (scrollViewNode.NodeSize.y < NodeTransform.NodeSize.y)
+                    if (scrollViewSize < interactionSize.y)
                     {
-                        verticalPosition = Mathf.Lerp(verticalStartLimit, verticalEndLimit, _scrollView.PlacementRatio);
-                        scrollViewNode.TransformSettings.PositionOffset.y = verticalPosition;
+                        verticalPosition = Mathf.Lerp(verticalStartLimit, verticalEndLimit,
+                            ScrollSettings.LayoutPlacementRatio);
+                        _layout.transform.localPosition = new Vector3(
+                            scrollViewLocalPosition.x,
+                            verticalPosition,
+                            scrollViewLocalPosition.z);
                     }
                     else
                     {
                         verticalPosition = Mathf.Clamp(currentVerticalPosition, verticalStartLimit, verticalEndLimit);
                         if (Mathf.Approximately(verticalPosition, currentVerticalPosition))
                         {
-                            scrollViewNode.TransformSettings.PositionOffset.y = verticalPosition;
+                            _layout.transform.localPosition = new Vector3(
+                                scrollViewLocalPosition.x,
+                                verticalPosition,
+                                scrollViewLocalPosition.z);
                         }
                         else
                         {
-                            scrollViewNode.TransformSettings.PositionOffset.y =
-                                Mathf.Lerp(currentVerticalPosition, verticalPosition, inertiaAmount);
+                            _layout.transform.localPosition = new Vector3(
+                                scrollViewLocalPosition.x,
+                                Mathf.Lerp(currentVerticalPosition, verticalPosition, inertiaAmount),
+                                scrollViewLocalPosition.z);
                         }
                     }
 
                     break;
-                case ENodeLayout.Horizontal:
-                    float horizontalStartLimit = (-NodeTransform.NodeSize.x + scrollSize) * 0.5f;
-                    float horizontalEndLimit = (NodeTransform.NodeSize.y - scrollSize) * 0.5f;
+                case ELayout.Horizontal:
+                    float horizontalStartLimit = (interactionSize.x - scrollViewSize) * 0.5f;
+                    float horizontalEndLimit = (-interactionSize.x + scrollViewSize) * 0.5f;
                     float horizontalPosition = 0f;
-                    float currentHorizontalPosition = scrollViewNode.TransformSettings.PositionOffset.x;
+                    float currentHorizontalPosition = scrollViewLocalPosition.x;
 
-                    if (scrollViewNode.NodeSize.x < NodeTransform.NodeSize.x)
+                    if (scrollViewSize < interactionSize.x)
                     {
                         horizontalPosition = Mathf.Lerp(horizontalStartLimit, horizontalEndLimit,
-                            _scrollView.PlacementRatio);
-                        scrollViewNode.TransformSettings.PositionOffset.x = horizontalPosition;
+                            ScrollSettings.LayoutPlacementRatio);
+                        _layout.transform.localPosition = new Vector3(
+                            horizontalPosition,
+                            scrollViewLocalPosition.y,
+                            scrollViewLocalPosition.z);
                     }
                     else
                     {
-                        horizontalPosition = Mathf.Clamp(scrollViewNode.TransformSettings.PositionOffset.x,
-                            horizontalEndLimit, horizontalStartLimit);
+                        horizontalPosition = Mathf.Clamp(currentHorizontalPosition, horizontalStartLimit,
+                            horizontalEndLimit);
                         if (Mathf.Approximately(horizontalPosition, currentHorizontalPosition))
                         {
-                            scrollViewNode.TransformSettings.PositionOffset.x = horizontalPosition;
+                            _layout.transform.localPosition = new Vector3(
+                                horizontalPosition,
+                                scrollViewLocalPosition.y,
+                                scrollViewLocalPosition.z);
                         }
                         else
                         {
-                            scrollViewNode.TransformSettings.PositionOffset.x =
-                                Mathf.Lerp(currentHorizontalPosition, horizontalPosition, inertiaAmount);
+                            _layout.transform.localPosition = new Vector3(
+                                Mathf.Lerp(currentHorizontalPosition, horizontalPosition, inertiaAmount),
+                                scrollViewLocalPosition.y,
+                                scrollViewLocalPosition.z);
                         }
                     }
 
@@ -117,53 +112,57 @@ namespace Brui.Runtime.Components
 
         public void ScrollTo(float ratio)
         {
-            ratio = _scrollView.NodeLayout.isReverse ? 1f - ratio : ratio;
-            var scrollSize = _scrollView.ScrollSize;
-            var scrollViewNode = _scrollView.NodeTransform;
+            ratio = _layout.IsReverse ? 1f - ratio : ratio;
+            var interactionSize = _interactionCollider.size;
+            var scrollViewSize = _layout.ViewSize;
+            var scrollViewLocalPosition = _layout.transform.localPosition;
 
-            switch (_scrollView.NodeLayout.layoutType)
+            switch (_layout.Layout)
             {
-                case ENodeLayout.Vertical:
-                    if (scrollViewNode.NodeSize.y < NodeTransform.NodeSize.y)
+                case ELayout.Vertical:
+                    if (scrollViewSize < interactionSize.y)
                     {
                         return;
                     }
 
-                    float verticalStartLimit = (NodeTransform.NodeSize.y - scrollSize) * 0.5f;
-                    float verticalEndLimit = (-NodeTransform.NodeSize.y + scrollSize) * 0.5f;
-                    scrollViewNode.TransformSettings.PositionOffset.y =
-                        Mathf.Lerp(verticalStartLimit, verticalEndLimit, ratio);
+                    float verticalStartLimit = (interactionSize.y - scrollViewSize) * 0.5f;
+                    float verticalEndLimit = (-interactionSize.y + scrollViewSize) * 0.5f;
+                    _layout.transform.localPosition = new Vector3(
+                        scrollViewLocalPosition.x,
+                        Mathf.Lerp(verticalStartLimit, verticalEndLimit, ratio),
+                        scrollViewLocalPosition.z);
                     break;
-                case ENodeLayout.Horizontal:
-                    if (scrollViewNode.NodeSize.x < NodeTransform.NodeSize.x)
+                case ELayout.Horizontal:
+                    if (scrollViewSize < interactionSize.x)
                     {
                         return;
                     }
 
-                    float horizontalStartLimit = (-NodeTransform.NodeSize.x + scrollSize) * 0.5f;
-                    float horizontalEndLimit = (NodeTransform.NodeSize.y - scrollSize) * 0.5f;
-
-                    scrollViewNode.TransformSettings.PositionOffset.x =
-                        Mathf.Lerp(horizontalEndLimit, horizontalStartLimit, ratio);
+                    float horizontalStartLimit = (interactionSize.x - scrollViewSize) * 0.5f;
+                    float horizontalEndLimit = (-interactionSize.x + scrollViewSize) * 0.5f;
+                    _layout.transform.localPosition = new Vector3(
+                        Mathf.Lerp(horizontalEndLimit, horizontalStartLimit, ratio),
+                        scrollViewLocalPosition.y,
+                        scrollViewLocalPosition.z);
                     break;
             }
         }
 
         public void ScrollTo(int itemIndex)
         {
-            ScrollTo(Mathf.Clamp01((float)itemIndex / _scrollView.ElementCount));
+            ScrollTo(Mathf.Clamp01((float)itemIndex / _layout.ElementCount));
         }
 
         public float GetItemScrollRatio(int itemIndex)
         {
-            return Mathf.Clamp01((float)itemIndex / _scrollView.ElementCount);
+            return Mathf.Clamp01((float)itemIndex / _layout.ElementCount);
         }
 
         public void OnBeginDrag(Vector2 position)
         {
             if (ScrollSettings.PropagateScroll)
             {
-                _parentScroll.OnBeginDrag(position);
+                _parentScroll?.OnBeginDrag(position);
             }
         }
 
@@ -171,7 +170,7 @@ namespace Brui.Runtime.Components
         {
             if (ScrollSettings.PropagateScroll)
             {
-                _parentScroll.OnEndDrag(position);
+                _parentScroll?.OnEndDrag(position);
             }
         }
 
@@ -179,20 +178,18 @@ namespace Brui.Runtime.Components
         {
             if (ScrollSettings.PropagateScroll)
             {
-                _parentScroll.OnDrag(position, delta);
+                _parentScroll?.OnDrag(position, delta);
             }
 
-            var scrollViewNode = _scrollView.NodeTransform;
-
-            switch (_scrollView.NodeLayout.layoutType)
+            switch (_layout.Layout)
             {
-                case ENodeLayout.Vertical:
-                    scrollViewNode.TransformSettings.PositionOffset +=
-                        delta.y * ScrollSettings.ScrollSpeed * Vector2.up;
+                case ELayout.Vertical:
+                    _layout.transform.localPosition +=
+                        delta.y * ScrollSettings.ScrollSpeed * Vector3.up;
                     break;
-                case ENodeLayout.Horizontal:
-                    scrollViewNode.TransformSettings.PositionOffset +=
-                        delta.x * ScrollSettings.ScrollSpeed * Vector2.right;
+                case ELayout.Horizontal:
+                    _layout.transform.localPosition +=
+                        delta.x * ScrollSettings.ScrollSpeed * Vector3.right;
                     break;
             }
         }
@@ -201,8 +198,8 @@ namespace Brui.Runtime.Components
     [Serializable]
     public class NodeScrollSettings
     {
+        [Range(0f, 1f)] public float LayoutPlacementRatio;
         public float ScrollSpeed = 1f;
-        public float ItemSize = 1f;
         public float Inertia = 10f;
         [Range(0f, 1f)] public float StartScroll = 0f;
         public bool PropagateScroll;

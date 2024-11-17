@@ -4,7 +4,6 @@ using UnityEngine;
 namespace Brui.Runtime.Components
 {
     [ExecuteAlways]
-    [DefaultExecutionOrder(NodeConstants.CanvasExecutionOrder)]
     public class NodeCanvas : MonoBehaviour
     {
         public NodeCamera nodeCamera;
@@ -67,13 +66,11 @@ namespace Brui.Runtime.Components
 
         private void SetNodeAnchor(NodeAnchor nodeAnchor, Vector2 parentSize)
         {
-            float anchorXMin = (nodeAnchor.XAnchors.x - 0.5f) * parentSize.x;
-            float anchorXMax = (nodeAnchor.XAnchors.y - 0.5f) * parentSize.x;
-            float anchorYMin = (nodeAnchor.YAnchors.x - 0.5f) * parentSize.y;
-            float anchorYMax = (nodeAnchor.YAnchors.y - 0.5f) * parentSize.y;
+            float anchorX = (nodeAnchor.Anchors.x - 0.5f) * parentSize.x;
+            float anchorY = (nodeAnchor.Anchors.y - 0.5f) * parentSize.x;
 
             nodeAnchor.transform.localPosition =
-                new Vector2((anchorXMin + anchorXMax) * 0.5f, (anchorYMin + anchorYMax) * 0.5f) +
+                new Vector2(anchorX, anchorY) +
                 nodeAnchor.PositionOffset;
         }
 

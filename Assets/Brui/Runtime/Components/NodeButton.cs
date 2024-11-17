@@ -7,7 +7,7 @@ namespace Brui.Runtime.Components
     public class NodeButton : MonoBehaviour, INodePointerClick
     {
         public bool IsClickable = true;
-        [Range(0f, 1f)] public float ClickStartScale = 0.9f;
+        [Range(0f, 1f)] public float ClickStartScale = 0.95f;
         public event Action OnButtonClickComplete;
         public event Action OnButtonClickCancel;
 
