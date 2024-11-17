@@ -10,9 +10,20 @@ namespace Brui.Runtime.Components
         public bool ApplySafeAreaX;
         public bool ApplySafeAreaY;
 
+        private int _order = 0;
         private Vector2 _screenSize;
         private Rect _safeArea;
         private Vector2 _canvasSize;
+        private Vector3 _offset = Vector3.zero;
+
+        public Vector3 Offset => _offset;
+
+        public Vector2 GetAnchorPoint(Vector2 anchor)
+        {
+            float posX = (anchor.x - 0.5f) * _canvasSize.x;
+            float posY = (anchor.y - 0.5f) * _canvasSize.y;
+            return new Vector2(posX, posY);
+        }
 
         private void Update()
         {
@@ -27,12 +38,12 @@ namespace Brui.Runtime.Components
             float width = cameraVerticalSize * (screenSize.x / screenSize.y) * 2f;
             float height = cameraVerticalSize * 2f;
 
-            Vector3 offset = Vector3.zero;
+            _offset = Vector3.zero;
             if (ApplySafeAreaX)
             {
                 float leftRatio = _safeArea.x / _screenSize.x;
                 float rightRatio = (_screenSize.x - (_safeArea.x + _safeArea.width)) / _screenSize.x;
-                offset.x += -(rightRatio - leftRatio) * 0.5f * width;
+                _offset.x += -(rightRatio - leftRatio) * 0.5f * width;
                 width *= 1 - (leftRatio + rightRatio);
             }
 
@@ -40,13 +51,13 @@ namespace Brui.Runtime.Components
             {
                 float bottomRatio = _safeArea.y / _screenSize.y;
                 float topRatio = (_screenSize.y - (_safeArea.y + _safeArea.height)) / _screenSize.y;
-                offset.y += -(topRatio - bottomRatio) * 0.5f * height;
+                _offset.y += -(topRatio - bottomRatio) * 0.5f * height;
                 height *= 1 - (bottomRatio + topRatio);
             }
 
             _canvasSize = new Vector2(width, height);
 
-            transform.position = cameraPosition + Vector3.forward * cameraDistance + offset;
+            transform.position = cameraPosition + Vector3.forward * cameraDistance + _offset;
 
             // resolve child nodes
 
@@ -60,14 +71,14 @@ namespace Brui.Runtime.Components
                     return;
                 }
 
-                SetNodeAnchor(childNode, new Vector2(width, height));
+                SetNodeAnchor(childNode, _canvasSize);
             }
         }
 
         private void SetNodeAnchor(NodeAnchor nodeAnchor, Vector2 parentSize)
         {
-            float anchorX = (nodeAnchor.Anchors.x - 0.5f) * parentSize.x;
-            float anchorY = (nodeAnchor.Anchors.y - 0.5f) * parentSize.y;
+            float anchorX = (nodeAnchor.Anchor.x - 0.5f) * parentSize.x;
+            float anchorY = (nodeAnchor.Anchor.y - 0.5f) * parentSize.y;
 
             nodeAnchor.transform.localPosition =
                 new Vector2(anchorX, anchorY) +
@@ -77,10 +88,8 @@ namespace Brui.Runtime.Components
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
-
             Vector3 position = transform.position;
-            Vector3 size = new Vector3(_canvasSize.x, _canvasSize.y, 0);
-            Gizmos.DrawWireCube(position, size);
+            Gizmos.DrawWireCube(position, _canvasSize);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Brui.Runtime.Components
 {
     public class NodeAnchor : MonoBehaviour
     {
-        public Vector2 Anchors;
+        public Vector2 Anchor;
         public Vector2 PositionOffset;
         
         private void OnDrawGizmosSelected()
