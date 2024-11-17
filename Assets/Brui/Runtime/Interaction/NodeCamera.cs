@@ -134,7 +134,7 @@ namespace Brui.Runtime.Interaction
 
                 if (IsPointerClickSet)
                 {
-                    if (_clickTimer < _clickInterval && hitCollider != null &&
+                    if (_clickTimer < _clickInterval && hitCount > 0 && hitCollider != null &&
                         hitCollider.TryGetComponent<INodePointerClick>(out var nodePointerClick) &&
                         nodePointerClick == _nodePointerClick)
                     {
@@ -172,9 +172,8 @@ namespace Brui.Runtime.Interaction
 
                 if (IsPointerClickSet)
                 {
-                    var hitCollider = _hits[0].collider;
-                    bool isOnClick = hitCollider != null &&
-                                     hitCollider.TryGetComponent<INodePointerClick>(out var nodePointerClick) &&
+                    bool isOnClick = hitCount > 0 &&
+                                     _hits[0].collider.TryGetComponent<INodePointerClick>(out var nodePointerClick) &&
                                      nodePointerClick == _nodePointerClick;
                     if (!isOnClick)
                     {
