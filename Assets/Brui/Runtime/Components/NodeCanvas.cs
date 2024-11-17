@@ -57,7 +57,7 @@ namespace Brui.Runtime.Components
                 var childNode = child.GetComponent<NodeAnchor>();
                 if (childNode == null)
                 {
-                    childNode = child.gameObject.AddComponent<NodeAnchor>();
+                    return;
                 }
 
                 SetNodeAnchor(childNode, new Vector2(width, height));
@@ -67,7 +67,7 @@ namespace Brui.Runtime.Components
         private void SetNodeAnchor(NodeAnchor nodeAnchor, Vector2 parentSize)
         {
             float anchorX = (nodeAnchor.Anchors.x - 0.5f) * parentSize.x;
-            float anchorY = (nodeAnchor.Anchors.y - 0.5f) * parentSize.x;
+            float anchorY = (nodeAnchor.Anchors.y - 0.5f) * parentSize.y;
 
             nodeAnchor.transform.localPosition =
                 new Vector2(anchorX, anchorY) +
@@ -76,7 +76,7 @@ namespace Brui.Runtime.Components
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.green;
+            Gizmos.color = Color.blue;
 
             Vector3 position = transform.position;
             Vector3 size = new Vector3(_canvasSize.x, _canvasSize.y, 0);
