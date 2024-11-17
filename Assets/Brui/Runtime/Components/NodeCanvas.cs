@@ -16,6 +16,8 @@ namespace Brui.Runtime.Components
         private Vector2 _canvasSize;
         private Vector3 _offset = Vector3.zero;
 
+        public Vector2 CanvasSize => _canvasSize;
+        
         private const float NodeOrderOffset = -0.0001f;
 
         public Vector2 GetAnchorPoint(Vector2 anchor)
@@ -60,8 +62,6 @@ namespace Brui.Runtime.Components
 
             transform.position = cameraPosition + Vector3.forward * cameraDistance + _offset;
 
-            // resolve child nodes
-
             ResolveChildren(transform);
         }
 
@@ -71,28 +71,9 @@ namespace Brui.Runtime.Components
             for (int i = 0; i < childCount; i++)
             {
                 var child = childTransform.GetChild(i);
-                var childAnchor = child.GetComponent<NodeAnchor>();
-                if (childAnchor != null)
-                {
-                    SetNodeAnchor(childAnchor, _canvasSize);
-                }
-                
                 SetChildOffset(child);
                 ResolveChildren(child);
             }
-        }
-
-        private void SetNodeAnchor(NodeAnchor nodeAnchor, Vector2 parentSize)
-        {
-            float anchorX = (nodeAnchor.Anchor.x - 0.5f) * parentSize.x;
-            float anchorY = (nodeAnchor.Anchor.y - 0.5f) * parentSize.y;
-
-            nodeAnchor.transform.localPosition =
-                new Vector3(
-                    anchorX + nodeAnchor.PositionOffset.x,
-                    anchorY + nodeAnchor.PositionOffset.y,
-                    nodeAnchor.transform.localPosition.z
-                );
         }
 
         private void SetChildOffset(Transform childTransform)
