@@ -7,12 +7,11 @@ namespace Brui.Runtime.Components
     {
         public Vector2 Anchor;
         public Vector2 PositionOffset;
-        [SerializeField] private NodeCanvas _nodeCanvas;
 
         private void Update()
         {
-            float anchorX = (Anchor.x - 0.5f) * _nodeCanvas.CanvasSize.x;
-            float anchorY = (Anchor.y - 0.5f) * _nodeCanvas.CanvasSize.y;
+            float anchorX = (Anchor.x - 0.5f) * NodeCanvas.CanvasSize.x;
+            float anchorY = (Anchor.y - 0.5f) * NodeCanvas.CanvasSize.y;
 
             transform.localPosition =
                 new Vector3(

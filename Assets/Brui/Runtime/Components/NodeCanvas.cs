@@ -16,7 +16,7 @@ namespace Brui.Runtime.Components
         private Vector2 _canvasSize;
         private Vector3 _offset = Vector3.zero;
 
-        public Vector2 CanvasSize => _canvasSize;
+        public static Vector2 CanvasSize { get; private set; }
         
         private const float NodeOrderOffset = -0.0001f;
 
@@ -59,6 +59,7 @@ namespace Brui.Runtime.Components
             }
 
             _canvasSize = new Vector2(width, height);
+            CanvasSize = _canvasSize;
 
             transform.position = cameraPosition + Vector3.forward * cameraDistance + _offset;
 
