@@ -16,6 +16,7 @@ namespace Brui.Runtime.Interaction
         [SerializeField] private TMP_InputField _inputField;
         [SerializeField] private CanvasScaler _canvasScaler;
         [SerializeField] private RectTransform _inputObjectRectTransform;
+        [SerializeField] private float _keyboardOffset = 10f;
 
         public static NodeTextInputField I { get; private set; }
         public event Action<string> OnSubmit;
@@ -87,8 +88,7 @@ namespace Brui.Runtime.Interaction
 
             yield return new WaitForSeconds(0.5f);
             float keyboardHeight = GetKeyboardHeight();
-            Debug.Log(keyboardHeight);
-            float newY = keyboardHeight + 10f;
+            float newY = keyboardHeight + (_keyboardOffset * Screen.height /  _canvasScaler.referenceResolution.y);
             _inputObjectRectTransform.anchoredPosition =
                 new Vector2(_inputObjectRectTransform.anchoredPosition.x, newY);
             _inputObject.SetActive(true);
