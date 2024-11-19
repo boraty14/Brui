@@ -20,6 +20,7 @@ namespace Brui.Runtime.Components
             for (int i = 0; i < ElementCount; i++)
             {
                 var element = transform.GetChild(i);
+                var elementLocalPosition = element.localPosition;
                 float currentPosition = startPosition + (i * iterator);
                 switch (_layout)
                 {
@@ -27,13 +28,13 @@ namespace Brui.Runtime.Components
                         element.localPosition = new Vector3(
                             0,
                             currentPosition,
-                            0);
+                            elementLocalPosition.z);
                         break;
                     case ELayout.Horizontal:
                         element.localPosition = new Vector3(
                             currentPosition,
                             0,
-                            0);
+                            elementLocalPosition.z);
                         break;
                 }
             }
